@@ -1,0 +1,5 @@
+/* Add this CSS code to your component's CSS file */
+
+.form-control {
+    max-width: 200px; /* Adjust this value according to your requirements */
+   }
