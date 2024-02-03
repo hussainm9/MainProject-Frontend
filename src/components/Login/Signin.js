@@ -1,8 +1,8 @@
 import { jwtDecode } from 'jwt-decode';
-//import jwt from 'jsonwebtoken';
 import _ from 'lodash';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import swal from 'sweetalert';
 import { v4 as uuidv4 } from 'uuid';
 import isEmail from 'validator/lib/isEmail';
 import axios from '../../config/axios';
@@ -10,6 +10,7 @@ import './Signin.css';
 
 
 function Login() {
+ 
   const navigate = useNavigate()
   const [user, setUser] = useState({
     email: '',
@@ -46,9 +47,12 @@ function Login() {
       try {
         const formData = _.pick(user, 'email', 'password');
         const response = await axios.post('/api/login', formData);
+        localStorage.setItem('token', response.data.token)
         const token = response.data.token
+        swal("success","login successfull","success")
         localStorage.setItem('token',token)
-                    console.log(token);
+        console.log(token);
+        
 
         if(response && token){
             const tokenData = jwtDecode(token)
@@ -58,7 +62,7 @@ function Login() {
               navigate('/restaurantHome')
 
              }else if(tokenData.role == 'admin'){
-              navigate('/adminHome')
+              navigate('/admindashboard')
              }else if(tokenData.role == 'guest'){
               navigate('/guestHome')
              }
@@ -71,9 +75,11 @@ function Login() {
       } catch (e) {
         console.log(e);
         setUser({...user,formErrors:{},serverErrors:e.response.data.errors})
+        swal("error","login failure","error")
+
       }
     }
-    // Add your login logic here
+   
   }
 
   function handleChange(e) {
@@ -87,8 +93,9 @@ function Login() {
   }
 
   return (
-    <div className="container mt-5">
-      <h2>Sign In</h2>
+    <div className="container d-flex justify-content-center align-items-center">
+      <div className="card p-4" style={{ maxWidth: '500px' }}>
+      <h2 className="mb-4 ">Sign In</h2>
       {/* {console.log(user.serverErrors)} */}
       {user.serverErrors&&(<>
         <ul>
@@ -155,6 +162,7 @@ function Login() {
       <p className="mt-3">
         New User? <Link to="/register">Register</Link>
       </p>
+      </div>
     </div>
   );
 }
