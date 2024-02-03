@@ -12,6 +12,8 @@ import GuestHome from './components/guestHome/Home';
 import RestaurantHome from './components/restaurantHome/Home';
 import AddMenu from './components/menu/AddMenu';
 import Header from './components/header/Header';
+import AddTable from './components/pages/AddTable';
+import LandingPage from './components/pages/LandingPage';
 
 
 
@@ -43,6 +45,8 @@ function App() {
                     <Route path='/guestHome' element={<GuestHome />} />
                     <Route path='/addmenu' element={<AddMenu />} />
                     <Route path='/guestHome' element={<GuestHome />} />
+                    <Route path='/addtable' element={<AddTable/>}/>
+                    <Route path='/home' element={<LandingPage/>}/>
                 </Routes>
             </div>
         </BrowserRouter>

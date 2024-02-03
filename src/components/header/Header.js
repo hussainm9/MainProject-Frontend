@@ -7,20 +7,17 @@ import logo from "../images/logo.png";
 import { useNavigate } from 'react-router-dom';
 
 export default function Header() {
-  const [role, setRole] = useState('')
+  const [role, setRole] = useState(null);
 
   const navigate = useNavigate();
-  const token = localStorage.getItem('token')
-  console.log(token)
-
-
+  const token = localStorage.getItem('token');
+  console.log(token);
 
   const handleLogout = (e) => {
     e.preventDefault();
     localStorage.removeItem('token');
-
     navigate('/login');
-  }
+  };
 
   useEffect(() => {
     if (token) {
@@ -35,12 +32,11 @@ export default function Header() {
     }
   }, [token]);
 
-
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-lg p-3 mb-5 bg-body rounded">
         <div className="container">
-          <a className="navbar-brand" href="logo">
+          <a className="navbar-brand" href="/home">
             <div className="row">
               <div className="col-md-2">
                 <img height={50} src={logo} className="rounded float-left" alt="Logo" />
@@ -60,20 +56,30 @@ export default function Header() {
                   />
                 </div>
               </li>
+
               <li className="nav-item pe-5">
                 <a className="nav-link active" aria-current="page" href="about">About</a>
               </li>
               <li className="nav-item pe-5">
                 <a className="nav-link active" aria-current="page" href="home">Home</a>
               </li>
-              <li className="nav-item pe-3">
-                {role === 'guest && restaurantOwner' || !token ? (
-                  <li className="nav-item pe-3">
-                    <a className="nav-link active" href="book">Book Table</a>
-                  </li>
-                ) : null}
 
-              </li>
+              {role === 'guest' || !token ? (
+                <li className="nav-item pe-3">
+                  <a className="nav-link active" href="book">Book Table</a>
+                </li>
+              ) : null}
+
+              {role === 'restaurantOwner' ? (
+                <>
+                  <li className="nav-item pe-3">
+                    <a className="nav-link active" aria-current="page" href="/addtable">Add Table</a>
+                  </li>
+                  <li className="nav-item pe-3">
+                    <a className="nav-link active" aria-current="page" href="/addmenu">Add Menu</a>
+                  </li>
+                </>
+              ) : null}
 
             </ul>
 
@@ -82,7 +88,6 @@ export default function Header() {
                 <button onClick={handleLogout} className="btn btn-danger ms-2 btn-sm">
                   Logout
                 </button>
-
               </div>
             ) : (
               <a href="/register" className="btn btn-primary ms-2 btn-sm" role="button">
