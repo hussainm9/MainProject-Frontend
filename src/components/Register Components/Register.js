@@ -1,8 +1,15 @@
+import React from 'react'
+import swal from 'sweetalert'
 import _ from 'lodash';
-import { useState } from "react";
+import { useState ,useEffect} from "react";
 import { Link, useNavigate } from 'react-router-dom';
+import Container from 'react-bootstrap/Container'
+import 'bootstrap/dist/css/bootstrap.css'
 import isEmail from 'validator/lib/isEmail';
 import axios from '../../config/axios';
+import { FaTimes } from 'react-icons/fa'
+import { BsCheck2All } from 'react-icons/bs'
+
 function Registration() {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
@@ -12,6 +19,46 @@ function Registration() {
     const [agree, setAgree] = useState(false);
     const [formErrors,setFormErrors] = useState({})
     const [serverErrors,setServerErrors] = useState([])
+    const [uCase,setUCase]=useState(false)
+    const [num,setNum]=useState(false)
+    const [sChar,setSChar]=useState(false)
+    const [length,setLength]=useState(false)
+    const [ispasswordFocus,setIsPasswordFocus]=useState(false)
+    const timesIcon=<FaTimes color='red' size={15}/>
+    const checkIcon=<BsCheck2All color='green' size={15}/>
+
+
+    useEffect (()=>{
+        const newpassword = String(password)
+        if(newpassword.match(/([a-z]*[A-Z])|([A-Z]*[a-z])/)){
+            setUCase(true)
+        }else{
+            setUCase(false)
+        }
+        if(newpassword.match(/([0-9])/)){
+            setNum(true)
+        }else{
+            setNum(false)
+        }
+        if(newpassword.match(/([!,@,#,$,%,^,&,*])/)){
+            setSChar(true)
+        }else{
+            setSChar(false)
+        }
+        if(newpassword.length>7){
+            setLength(true)
+        }else{
+            setLength(false)
+        }
+    },[password])
+    
+    const switchIcon=(conditon)=>{
+        if(conditon){
+            return checkIcon
+        }else{
+            return timesIcon
+        }
+    }
 
     const errors = {}
     const navigate = useNavigate()
@@ -32,7 +79,7 @@ function Registration() {
         if((selectedOption !=='restaurantOwner') && (selectedOption !== 'guest')){
             errors.selectedOption = 'please select a option as guest or restaurantOwner'
         }
-        if(agree == false){
+        if(agree === false){
             errors.agree = 'please tick the terms andd conditions'
         }
         if(mobile.trim().length===0){
@@ -41,8 +88,15 @@ function Registration() {
             errors.mobile = 'length must be 10 characters'
 
         }
+    };
+    
+    const handlePasswordFocus=()=>{
+        setIsPasswordFocus(true)
     }
-
+    const handlePasswordBlur=()=>{
+        setIsPasswordFocus(false)
+    }
+    
    async function handleSubmit(e) {
         e.preventDefault();
         runValidator()
@@ -54,39 +108,34 @@ function Registration() {
             console.log('no errors found');
             const formData = {
                 username,
-                email,mobile,password,mobile,role:selectedOption
+                email,mobile,password,role:selectedOption
             }
             try{
                const response = await axios.post('/api/register',formData)
                console.log(response.data);
+               swal("success","Registred sucessfully","success")
                setServerErrors([])
                navigate('/login')
-
-                
-
             }catch(e){
                 console.log(e);
                 setFormErrors({})
+                swal("error","Registration failure","error")
                 setServerErrors(e.response.data.errors)
                 
 
             }
 
         }
-        // Add your form submission logic here
+        
     }
-    // function handleTerms(){
-    //     navigate('/terms')
-
-    // }
-    // function handleSignIn(){
-    //     navigate('/signin')
-    // }
-
+    
     return (
-        <div className="container mt-5">
-            <h2 className="mb-4">SignUp </h2>
-           {/* {console.log(serverErrors)}  */}
+        <div className="container d-flex justify-content-center align-items-center">
+            <Container>
+            
+            <div className="card p-4" style={{ maxWidth: '500px' }}>
+            <h2 className="mb-4 ">SignUp </h2>
+          
            {!_.isEmpty(serverErrors)&&
            <ul>
             {
@@ -97,11 +146,12 @@ function Registration() {
            </ul>
            }
             <form onSubmit={handleSubmit}>
-                <div className="mb-3 row">
-                    <label htmlFor='username' className="col-2 col-form-label">Enter Name</label>
-                    <div className="col-3">
+                <div className="mb-3 row ">
+                    <label htmlFor='username' className="col-4 col-form-label">Enter Name</label>
+                    <div className="col-8">
                         <input
                             type="text"
+                            name='name'
                             value={username}
                             className="form-control"
                             id="username"
@@ -111,8 +161,8 @@ function Registration() {
                     </div>
                 </div>
                 <div className="mb-3 row">
-                    <label htmlFor='email' className="col-2 col-form-label">Enter Email</label>
-                    <div className="col-3">
+                    <label htmlFor='email' className="col-4 col-form-label">Enter Email</label>
+                    <div className="col-8">
                         <input
                             type="email"
                             value={email}
@@ -124,8 +174,8 @@ function Registration() {
                     </div>
                 </div>
                 <div className="mb-3 row">
-                    <label htmlFor='mobile' className="col-2 col-form-label">Enter Mobile</label>
-                    <div className="col-3">
+                    <label htmlFor='mobile' className="col-4 col-form-label">Enter Mobile</label>
+                    <div className="col-8">
                         <input
                             type="number"
                             value={mobile}
@@ -137,16 +187,39 @@ function Registration() {
                     </div>
                 </div>
                 <div className="mb-3 row">
-                    <label htmlFor='password' className="col-2 col-form-label">Enter Password</label>
-                    <div className="col-3">
+                    <label htmlFor='password' className="col-4 col-form-label">Enter Password</label>
+                    <div className="col-8">
                         <input
                             type="password"
                             value={password}
                             className="form-control"
                             id="password"
                             onChange={(e) => { setPassword(e.target.value) }}
+                            onFocus={handlePasswordFocus}
+                            onBlur={handlePasswordBlur}
                         />
-                        {formErrors.password && <span style={{ color: 'red' }}>{formErrors.password}</span>}
+                        {/* {formErrors.password && <span style={{ color: 'red' }}>{formErrors.password}</span>} */}
+                        {ispasswordFocus &&(
+                            <div className="card mt-4">
+                            <div className="card-body">
+                                <ul className="list-unstyled mb-0">
+                                    <li>
+                                        {switchIcon(uCase)} &nbsp; Atleast one lowercase & upercase letter
+                                    </li>
+                                    <li>
+                                        {switchIcon(num)} &nbsp; Atleast One number between (0-9)
+                                    </li>
+                                    <li>
+                                        {switchIcon(sChar)} &nbsp; Atleast One Special Char (!@#$%^&*)
+                                    </li>
+                                    <li>
+                                        {switchIcon(length)} &nbsp; Password length should be 8 characters
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        )}
+                        
                     </div>
                 </div>
                 <div className="mb-3 form-check">
@@ -189,9 +262,13 @@ function Registration() {
                     </label>
                     <p>{formErrors.agree && <span style={{ color: 'red' }}>{formErrors.agree}</span>}</p>
                 </div>
-                <button type="submit" className="btn btn-primary">Submit</button>
+                <button type="submit" className="btn btn-primary"  >Submit</button>
             </form>
             <p className="mt-3">Already have an account? <Link to='/login' >Sign in</Link></p>
+            </div>
+            
+            </Container> 
+            
         </div>
     );
 }

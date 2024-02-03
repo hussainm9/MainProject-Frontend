@@ -1,0 +1,44 @@
+* {
+    margin: auto;
+    padding: auto;
+  }
+  .bg-dark-pink {
+    background-color:dimgray 
+  }
+  
+  .box {
+    height: 40px;
+    display: flex;
+    cursor: pointer;
+    padding: 10px 20px;
+    background-color: aliceblue;
+    border-radius: 30px;
+    align-items: center;
+    box-sizing: 0 10px 25px rgba(0, 0, 0, 0.3);
+  }
+  
+  .box:hover input {
+    width: 300px;
+  }
+  
+  .box input {
+    width: 0;
+    outline: none;
+    border: none;
+    font-weight: 500;
+    transition: 0.8s;
+    background-color: transparent;
+  }
+  
+  .box a.fas {
+    color: burlywood;
+    font-size: 18px;
+  }
+  
+  .nav_ul li {
+    padding: 0 0.7rem;
+  }
+  .rounded {
+    border-radius: 50%;
+  }
+  
