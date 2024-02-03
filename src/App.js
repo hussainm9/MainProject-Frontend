@@ -7,7 +7,9 @@ import AdminHome from './components/adminHome/Home';
 import ForgotPassword from './components/forgotPassword/ForgotPassword';
 import ResetPassword from './components/forgotPassword/resetPassword';
 import GuestHome from './components/guestHome/Home';
+import RestaurantDashboard from './components/restaurantHome/Dashboard';
 import RestaurantHome from './components/restaurantHome/Home';
+import ThankYou from './components/restaurantHome/ThankYou';
 function App(){
 
     return(
@@ -29,6 +31,9 @@ function App(){
             <Route path='/resetPassword/:id/:token' element={<ResetPassword/>} />
 
             <Route path='/guestHome' element={<GuestHome/>}/>
+            <Route path='/register/thankyou' element={<ThankYou/>} />
+            <Route path='/restaurant/:restaurantId' element={<RestaurantDashboard/>} />
+
         </Routes>
         
         

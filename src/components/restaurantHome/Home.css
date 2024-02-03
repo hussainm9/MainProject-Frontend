@@ -1,0 +1,9 @@
+.timing-entry {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.timing-entry label {
+    margin-right: 10px;
+}

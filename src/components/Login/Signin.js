@@ -47,6 +47,7 @@ function Login() {
         const formData = _.pick(user, 'email', 'password');
         const response = await axios.post('/api/login', formData);
         const token = response.data.token
+        localStorage.setItem('token',token)
                     console.log(token);
 
         if(response && token){
