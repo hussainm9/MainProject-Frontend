@@ -10,7 +10,7 @@ import './Signin.css';
 
 
 function Login() {
- 
+
   const navigate = useNavigate()
   const [user, setUser] = useState({
     email: '',
@@ -49,36 +49,36 @@ function Login() {
         const response = await axios.post('/api/login', formData);
         localStorage.setItem('token', response.data.token)
         const token = response.data.token
-        swal("success","login successfull","success")
+        swal("success", "login successfull", "success")
         console.log(token);
-        
 
-        if(response && token){
-            const tokenData = jwtDecode(token)
-             console.log(tokenData);
-             console.log(tokenData.role);
-             if(tokenData.role=='restaurantOwner'){
-              navigate('/restaurantHome')
 
-             }else if(tokenData.role == 'admin'){
-              navigate('/admindashboard')
-             }else if(tokenData.role == 'guest'){
-              navigate('/guestHome')
-             }
-            //console.log(token);
-            
-            setUser({...user,serverErrors:[]})
-        }else{
-            console.log('error in response');
+        if (response && token) {
+          const tokenData = jwtDecode(token)
+          console.log(tokenData);
+          console.log(tokenData.role);
+          if (tokenData.role == 'restaurantOwner') {
+            navigate('/restaurantHome')
+
+          } else if (tokenData.role == 'admin') {
+            navigate('/admindashboard')
+          } else if (tokenData.role == 'guest') {
+            navigate('/guestHome')
+          }
+          //console.log(token);
+
+          setUser({ ...user, serverErrors: [] })
+        } else {
+          console.log('error in response');
         }
       } catch (e) {
         console.log(e);
-        setUser({...user,formErrors:{},serverErrors:e.response.data.errors})
-        swal("error","login failure","error")
+        setUser({ ...user, formErrors: {}, serverErrors: e.response.data.errors })
+        swal("error", "login failure", "error")
 
       }
     }
-   
+
   }
 
   function handleChange(e) {
@@ -94,73 +94,73 @@ function Login() {
   return (
     <div className="container d-flex justify-content-center align-items-center">
       <div className="card p-4" style={{ maxWidth: '500px' }}>
-      <h2 className="mb-4 ">Sign In</h2>
-      {/* {console.log(user.serverErrors)} */}
-      {user.serverErrors&&(<>
-        <ul>
+        <h2 className="mb-4 ">Sign In</h2>
+        {/* {console.log(user.serverErrors)} */}
+        {user.serverErrors && (<>
+          <ul>
             {
-                user.serverErrors.map((ele)=>{
-                    return <li key={uuidv4() } style={{color:'red'}}>{ele.msg}</li>
-                })
+              user.serverErrors.map((ele) => {
+                return <li key={uuidv4()} style={{ color: 'red' }}>{ele.msg}</li>
+              })
             }
-        </ul>
-      </>)}
-      <form onSubmit={handleSubmit} className="g-3">
-        <div className="mb-3">
-          <label htmlFor="email" className="form-label">
-            Email
-          </label>
-          <input
-            type="email"
-            value={user.email}
-            onChange={(e) => handleChange(e)}
-            name="email"
-            id="email"
-            className="form-control"
-          />
-        </div>
-        {user.formErrors.email&&<span style={{color:'red'}}>{user.formErrors.email}</span>}
-        <div className="mb-3">
-          <label htmlFor="password" className="form-label">
-            Password
-          </label>
-          <div className="input-group">
+          </ul>
+        </>)}
+        <form onSubmit={handleSubmit} className="g-3">
+          <div className="mb-3">
+            <label htmlFor="email" className="form-label">
+              Email
+            </label>
             <input
-              type={user.showPassword ? 'text' : 'password'}
-              value={user.password}
+              type="email"
+              value={user.email}
               onChange={(e) => handleChange(e)}
-              onCopy={(e) => handleCutCopyPaste(e)}
-              onCut={(e) => handleCutCopyPaste(e)}
-              onPaste={(e) => handleCutCopyPaste(e)}
-              name="password"
-              id="password"
+              name="email"
+              id="email"
               className="form-control"
             />
-            <button
-              type="button"
-              className="btn btn-outline-secondary"
-              onClick={() => setUser({ ...user, showPassword: !user.showPassword })}
-            >
-              {user.showPassword ? 'Hide' : 'Show'}
+          </div>
+          {user.formErrors.email && <span style={{ color: 'red' }}>{user.formErrors.email}</span>}
+          <div className="mb-3">
+            <label htmlFor="password" className="form-label">
+              Password
+            </label>
+            <div className="input-group">
+              <input
+                type={user.showPassword ? 'text' : 'password'}
+                value={user.password}
+                onChange={(e) => handleChange(e)}
+                onCopy={(e) => handleCutCopyPaste(e)}
+                onCut={(e) => handleCutCopyPaste(e)}
+                onPaste={(e) => handleCutCopyPaste(e)}
+                name="password"
+                id="password"
+                className="form-control"
+              />
+              <button
+                type="button"
+                className="btn btn-outline-secondary"
+                onClick={() => setUser({ ...user, showPassword: !user.showPassword })}
+              >
+                {user.showPassword ? 'Hide' : 'Show'}
+              </button>
+            </div>
+          </div>
+          {user.formErrors.password && <span style={{ color: 'red' }}>{user.formErrors.password}</span>}
+
+          <div className="mb-3">
+            <p>
+              <Link to="/forgotPassword">Forgot Password?</Link>
+            </p>
+          </div>
+          <div>
+            <button type="submit" className="btn btn-primary">
+              Sign In
             </button>
           </div>
-        </div>
-        {user.formErrors.password&&<span style={{color:'red'}}>{user.formErrors.password}</span>}
-
-        <div className="mb-3">
-          <p>
-            <Link to="/forgotPassword">Forgot Password?</Link>
-          </p>
-        </div>
-        <div>
-          <button type="submit" className="btn btn-primary">
-            Sign In
-          </button>
-        </div>
-      </form>
-      <p className="mt-3">
-        New User? <Link to="/register">Register</Link>
-      </p>
+        </form>
+        <p className="mt-3">
+          New User? <Link to="/register">Register</Link>
+        </p>
       </div>
     </div>
   );
