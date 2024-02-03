@@ -1,5 +1,5 @@
-import React from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
+import React from 'react';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import Login from './components/Login/Signin';
@@ -9,8 +9,10 @@ import AdminDashboard from './components/admin/AdminDashboard';
 import ForgotPassword from './components/forgotPassword/ForgotPassword';
 import ResetPassword from './components/forgotPassword/resetPassword';
 import GuestHome from './components/guestHome/Home';
-import RestaurantHome from './components/restaurantHome/Home';
 import Header from './components/header/Header';
+import RestaurantDashboard from './components/restaurantHome/Dashboard';
+import RestaurantHome from './components/restaurantHome/Home';
+import ThankYou from './components/restaurantHome/ThankYou';
 
 
 function App(){
@@ -37,6 +39,9 @@ function App(){
             <Route path='/resetPassword/:id/:token' element={<ResetPassword/>} />
 
             <Route path='/guestHome' element={<GuestHome/>}/>
+            <Route path='/register/thankyou' element={<ThankYou/>} />
+            <Route path='/restaurant/:restaurantId' element={<RestaurantDashboard/>} />
+
         </Routes>
        
         

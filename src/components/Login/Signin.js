@@ -1,8 +1,8 @@
 import { jwtDecode } from 'jwt-decode';
-import swal from 'sweetalert'
 import _ from 'lodash';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import swal from 'sweetalert';
 import { v4 as uuidv4 } from 'uuid';
 import isEmail from 'validator/lib/isEmail';
 import axios from '../../config/axios';
@@ -50,6 +50,7 @@ function Login() {
         localStorage.setItem('token', response.data.token)
         const token = response.data.token
         swal("success","login successfull","success")
+        localStorage.setItem('token',token)
         console.log(token);
         
 
