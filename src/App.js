@@ -12,6 +12,7 @@ import GuestHome from './components/guestHome/Home';
 import Header from './components/header/Header';
 import RestaurantDashboard from './components/restaurantHome/Dashboard';
 import RestaurantHome from './components/restaurantHome/Home';
+import Rejected from './components/restaurantHome/Rejected';
 import ThankYou from './components/restaurantHome/ThankYou';
 
 
@@ -40,6 +41,7 @@ function App(){
 
             <Route path='/guestHome' element={<GuestHome/>}/>
             <Route path='/register/thankyou' element={<ThankYou/>} />
+            <Route path='/rejected' element={<Rejected/>} />
             <Route path='/restaurant/:restaurantId' element={<RestaurantDashboard/>} />
 
         </Routes>

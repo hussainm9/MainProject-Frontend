@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { jwtDecode } from 'jwt-decode';
 import 'bootstrap/dist/css/bootstrap.css';
-import './header.css';
+import { jwtDecode } from 'jwt-decode';
+import React, { useEffect, useState } from 'react';
 import { BiSearch } from 'react-icons/bi';
-import logo from "../images/logo.png";
 import { useNavigate } from 'react-router-dom';
+import logo from "../images/logo.png";
+import './header.css';
 
 export default function Header() {
   const [role,setRole]=useState('')

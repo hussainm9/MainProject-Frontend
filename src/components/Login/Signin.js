@@ -59,7 +59,43 @@ function Login() {
              console.log(tokenData);
              console.log(tokenData.role);
              if(tokenData.role=='restaurantOwner'){
-              navigate('/restaurantHome')
+              try{
+                const restaurant = await axios.get(`/api/restaurant/${tokenData.id}`,{
+                  headers:{
+                    Authorization:token
+                  }
+                }) 
+                console.log(restaurant.data._id,'restaurant');
+                const id = restaurant.data._id
+
+                console.log(restaurant.data,'restaurant');
+                const status = restaurant.data.status
+                console.log(restaurant.data);
+                if(status == 'approved'){
+                  console.log('approved');
+                  navigate(`/restaurant/${id}`)
+
+
+                }else if(status == 'rejected'){
+                  console.log('rejected');
+                  navigate('/rejected')
+
+
+                }else if(status == 'pending'){
+                  console.log('pending');
+
+                  navigate('/restaurantHome')
+                }
+
+              }catch(e){
+                console.log(e,'error restaurant fetching');
+                if(e.response.data.error == 'restaurant not found'){
+
+                  navigate('/restaurantHome')
+                }
+              }
+
+              
 
              }else if(tokenData.role == 'admin'){
               navigate('/admindashboard')
