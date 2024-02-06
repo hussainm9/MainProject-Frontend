@@ -5,6 +5,7 @@ const userReducer = (state, action) => {
         return { ...state, userDetails: action.payload };
   
       case 'UPDATE_DETAILS':
+        console.log(action.value)
         return {
           ...state,
           userDetails: {
