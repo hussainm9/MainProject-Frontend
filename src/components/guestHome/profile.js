@@ -55,6 +55,7 @@ export default function Profile() {
       setIsUpdate(false); // Reset the update mode
     } catch (error) {
       console.error('Error updating user details:', error);
+      setIsUpdate(false)
     }
   }
 
