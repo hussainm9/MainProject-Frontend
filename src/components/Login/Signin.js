@@ -1,8 +1,8 @@
 import { jwtDecode } from 'jwt-decode';
-import swal from 'sweetalert'
 import _ from 'lodash';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import swal from 'sweetalert';
 import { v4 as uuidv4 } from 'uuid';
 import isEmail from 'validator/lib/isEmail';
 import axios from '../../config/axios';
@@ -49,27 +49,66 @@ function Login() {
         const response = await axios.post('/api/login', formData);
         localStorage.setItem('token', response.data.token)
         const token = response.data.token
-        swal("success", "login successfull", "success")
+
+        swal("success","login successfull","success")
+        localStorage.setItem('token',token)
         console.log(token);
+        
+
+        if(response && token){
+            const tokenData = jwtDecode(token)
+             console.log(tokenData);
+             console.log(tokenData.role);
+             if(tokenData.role=='restaurantOwner'){
+              try{
+                const restaurant = await axios.get(`/api/restaurant/${tokenData.id}`,{
+                  headers:{
+                    Authorization:token
+                  }
+                }) 
+                console.log(restaurant.data._id,'restaurant');
+                const id = restaurant.data._id
+
+                console.log(restaurant.data,'restaurant');
+                const status = restaurant.data.status
+                console.log(restaurant.data);
+                if(status == 'approved'){
+                  console.log('approved');
+                  navigate(`/restaurant/${id}`)
 
 
-        if (response && token) {
-          const tokenData = jwtDecode(token)
-          console.log(tokenData);
-          console.log(tokenData.role);
-          if (tokenData.role == 'restaurantOwner') {
-            navigate('/restaurantHome')
+                }else if(status == 'rejected'){
+                  console.log('rejected');
+                  navigate('/rejected')
 
-          } else if (tokenData.role == 'admin') {
-            navigate('/admindashboard')
-          } else if (tokenData.role == 'guest') {
-            navigate('/guestHome')
-          }
-          //console.log(token);
 
-          setUser({ ...user, serverErrors: [] })
-        } else {
-          console.log('error in response');
+                }else if(status == 'pending'){
+                  console.log('pending');
+
+                  navigate('/restaurantHome')
+                }
+
+              }catch(e){
+                console.log(e,'error restaurant fetching');
+                if(e.response.data.error == 'restaurant not found'){
+
+                  navigate('/restaurantHome')
+                }
+              }
+
+              
+
+             }else if(tokenData.role == 'admin'){
+              navigate('/admindashboard')
+             }else if(tokenData.role == 'guest'){
+              navigate('/guestHome')
+             }
+            //console.log(token);
+            
+            setUser({...user,serverErrors:[]})
+        }else{
+            console.log('error in response');
+
         }
       } catch (e) {
         console.log(e);
