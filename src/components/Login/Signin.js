@@ -50,64 +50,64 @@ function Login() {
         localStorage.setItem('token', response.data.token)
         const token = response.data.token
 
-        swal("success","login successfull","success")
-        localStorage.setItem('token',token)
+        swal("success", "login successfull", "success")
+        localStorage.setItem('token', token)
         console.log(token);
-        
-
-        if(response && token){
-            const tokenData = jwtDecode(token)
-             console.log(tokenData);
-             console.log(tokenData.role);
-             if(tokenData.role=='restaurantOwner'){
-              try{
-                const restaurant = await axios.get(`/api/restaurant/${tokenData.id}`,{
-                  headers:{
-                    Authorization:token
-                  }
-                }) 
-                console.log(restaurant.data._id,'restaurant');
-                const id = restaurant.data._id
-
-                console.log(restaurant.data,'restaurant');
-                const status = restaurant.data.status
-                console.log(restaurant.data);
-                if(status == 'approved'){
-                  console.log('approved');
-                  navigate(`/restaurant/${id}`)
 
 
-                }else if(status == 'rejected'){
-                  console.log('rejected');
-                  navigate('/rejected')
-
-
-                }else if(status == 'pending'){
-                  console.log('pending');
-
-                  navigate('/restaurantHome')
+        if (response && token) {
+          const tokenData = jwtDecode(token)
+          console.log(tokenData);
+          console.log(tokenData.role);
+          if (tokenData.role == 'restaurantOwner') {
+            try {
+              const restaurant = await axios.get(`/api/restaurant / ${ tokenData.id }`,{
+                headers: {
+                  Authorization: token
                 }
+              })
+              console.log(restaurant.data._id, 'restaurant');
+              const id = restaurant.data._id
 
-              }catch(e){
-                console.log(e,'error restaurant fetching');
-                if(e.response.data.error == 'restaurant not found'){
+              console.log(restaurant.data, 'restaurant');
+              const status = restaurant.data.status
+              console.log(restaurant.data);
+              if (status == 'approved') {
+                console.log('approved');
+                navigate(`/restaurant/${ id }`)
 
-                  navigate('/restaurantHome')
-                }
+
+              } else if (status == 'rejected') {
+                console.log('rejected');
+                navigate('/rejected')
+
+
+              } else if (status == 'pending') {
+                console.log('pending');
+
+                navigate('/restaurantHome')
               }
 
-              
+            } catch (e) {
+              console.log(e, 'error restaurant fetching');
+              if (e.response.data.error == 'restaurant not found') {
 
-             }else if(tokenData.role == 'admin'){
-              navigate('/admindashboard')
-             }else if(tokenData.role == 'guest'){
-              navigate('/guestHome')
-             }
-            //console.log(token);
-            
-            setUser({...user,serverErrors:[]})
-        }else{
-            console.log('error in response');
+                navigate('/restaurantHome')
+              }
+            }
+
+
+
+          } else if (tokenData.role == 'admin') {
+            navigate('/admindashboard')
+          } else if (tokenData.role == 'guest') {
+            navigate('/')
+          }
+          //console.log(token);
+
+          setUser({ ...user, serverErrors: [] })
+        } else {
+          console.log('error in response');
 
         }
       } catch (e) {

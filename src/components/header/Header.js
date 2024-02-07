@@ -1,5 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
-import userContext from '../../contextApi/userContext';
+import React, { useEffect, useState} from 'react';
 import { Link } from 'react-router-dom'
 import { jwtDecode } from 'jwt-decode';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -14,7 +13,7 @@ export default function Header() {
   const [role, setRole] = useState(null);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
 
-  const { userState } = useContext(userContext)
+  // const { userState } = useContext(userContext)
 
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
@@ -41,7 +40,11 @@ export default function Header() {
       }
     }
   }, [token]);
-
+  const handleLogin=()=>{
+    if(!localStorage.getItem('token')){
+      navigate('/login')
+    }
+  }
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-lg p-3 mb-5 bg-body rounded">
@@ -68,31 +71,29 @@ export default function Header() {
               </li>
 
               <li className="nav-item pe-5">
-                <Link className="nav-link active" aria-current="page" href="about">About</Link>
+                <Link className="nav-link active" aria-current="page" to="/about">About</Link>
               </li>
               <li className="nav-item pe-5">
-                <Link className="nav-link active" aria-current="page" href="home">Home</Link>
+                <Link className="nav-link active" aria-current="page" to='/'>Home</Link>
               </li>
 
               {role === 'guest' || !token ? (
                 <li className="nav-item pe-3">
-                  <Link className="nav-link active" href="book">Book Table</Link>
+                  <Link className="nav-link active" href="book" onClick={handleLogin}>Book Table</Link>
                 </li>
-              ) : null}
+              ) : <>
+              <li className="nav-item pe-3">
+                <Link className="nav-link active" aria-current="page" to="/addtable" >Add Table</Link>
+              </li>
+              <li className="nav-item pe-3">
+                <Link className="nav-link active" aria-current="page" to="/addmenu">Add Menu</Link>
+              </li>
+              <li className="nav-item pe-3">
+                <Link className="nav-link active" aria-current="page" to="/restaurant/:restaurantId">Dashboard</Link>
+              </li>
+            </>}
 
-              {role === 'restaurantOwner' ? (
-                <>
-                  <li className="nav-item pe-3">
-                    <Link className="nav-link active" aria-current="page" to="/addtable">Add Table</Link>
-                  </li>
-                  <li className="nav-item pe-3">
-                    <Link className="nav-link active" aria-current="page" to="/addmenu">Add Menu</Link>
-                  </li>
-                  <li className="nav-item pe-3">
-                    <Link className="nav-link active" aria-current="page" to="/restaurant/:restaurantId">Dashboard</Link>
-                  </li>
-                </>
-              ) : null}
+              
 
             </ul>
 
@@ -100,7 +101,7 @@ export default function Header() {
               <div className="d-flex align-items-center">
                 <div className="dropdown" onClick={toggleProfileDropdown}>
                   <CgProfile className="profile-icon" style={{ fontSize: '40px' }}/>
-                  {userState.userDetails.username}
+                  {/* {userState.userDetails.username} */}
                   {showProfileDropdown && <ProfileDropdown handleLogout={handleLogout} />}
                 </div>
               </div>
