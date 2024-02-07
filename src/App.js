@@ -72,7 +72,7 @@ function App() {
                         Authorization:localStorage.getItem('token')
                     }
                 })
-               // console.log(data);
+                console.log(data);
                 restaurantDispatch({type:'GET_ALL',payload:data})
 
 
