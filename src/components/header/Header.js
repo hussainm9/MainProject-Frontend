@@ -1,13 +1,14 @@
-import React, { useEffect, useState} from 'react';
-import { Link } from 'react-router-dom'
-import { jwtDecode } from 'jwt-decode';
+
 import 'bootstrap/dist/css/bootstrap.css';
-import { CgProfile } from "react-icons/cg";
-import './header.css';
+import { jwtDecode } from 'jwt-decode';
+import React, { useContext, useEffect, useState } from 'react';
 import { BiSearch } from 'react-icons/bi';
-import logo from "../images/logo.png";
-import { useNavigate } from 'react-router-dom';
+import { CgProfile } from "react-icons/cg";
+import { Link, useNavigate } from 'react-router-dom';
+import userContext from '../../contextApi/userContext';
 import ProfileDropdown from '../guestHome/profileDropdown';
+import logo from "../images/logo.png";
+import './header.css';
 
 export default function Header() {
   const [role, setRole] = useState(null);
