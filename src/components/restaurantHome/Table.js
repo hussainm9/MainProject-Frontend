@@ -1,4 +1,6 @@
+
 function Table(){
+
 
     return(<div>
         <h2>Book Table</h2>
