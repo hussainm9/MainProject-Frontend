@@ -1,9 +1,7 @@
-import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
-import { useState} from 'react';
-import { useNavigate } from 'react-router-dom';
-import PendingRes from './PendingRes';
+import React, { useState } from 'react';
 import ApprovedRes from './ApprovedRes';
+import PendingRes from './PendingRes';
 import RejectedRes from './RejectedRes';
 
 
