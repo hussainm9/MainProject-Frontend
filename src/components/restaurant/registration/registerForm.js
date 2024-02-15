@@ -1,7 +1,9 @@
+import axios from 'axios';
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from '../../config/axios';
-import './Home.css';
+import axiosInstance from '../../../config/axios';
+import { restaurantRegistration } from '../../../services/restaurantService';
+import './registerForm.css';
 
 export default function Home() {
     const navigate = useNavigate()
@@ -22,84 +24,119 @@ export default function Home() {
     const [lattitude, setlattitude] = useState('');
     const [longitude, setlongitude] = useState('');
     const [timings, setTimings] = useState([]);
-    let restaurantId;
+    const [formErrors,setFormErrors] = useState({})
+    const errors = {}
+    let restaurantId
+    function runValidator(){
+        if(name.trim().length===0){
+            errors.name = 'name is required'
+        }
+        if(street.trim().length ===0){
+            errors.street = 'street is required'
+        }
+        if(area.trim().length === 0 ){
+            errors.area = 'area is required'
+        }
+        if(city.trim().length ===0 ){
+            errors.city = 'city is required'
+        }
+        if(state.trim().length === 0 ){
+            errors.state = 'state is required'
+        }
+        if(pincode.trim().length === 0){
+            errors.pincode = 'pincode is required'
+        }
+        if(restaurant.description.trim().length === 0){
+           
+            errors.description = 'description is required'
+        }
+        if(restaurant.gstIn.trim().length === 0){
+            errors.gstIn = 'gstIn is required'
+        }
+        if(timings.length == 0){
+            errors.timings = 'timings is required'
+        }
+    }
 
     async function handleSubmit(e) {
         e.preventDefault();
-        
-        // Create a new FormData object
-        const formData = new FormData();
-    
-        // Append text fields to FormData
-        formData.append('name', eLoc.name);
-        formData.append('description', restaurant.description);
-        formData.append('gstNo', restaurant.gstIn);
-        formData.append('geo[lat]', lattitude);
-        formData.append('geo[lon]', longitude);
-        
-        // Append file fields to FormData
-        if (fssai) {
-            formData.append('licenseNumber', fssai);
-        }
-        if (selectedFile) {
-            formData.append('image', selectedFile);
-        }
-    
-        // Append address details
-        formData.append('address[street]', street);
-        formData.append('address[area]', area);
-        formData.append('address[city]', city);
-        formData.append('address[state]', state);
-        formData.append('address[pincode]', pincode);
-    
-        // Append timings data
-        timings.forEach((timing, index) => {
-            formData.append(`timings[${index}][dayOfWeek]`, timing.dayOfWeek);
-            formData.append(`timings[${index}][openingTime]`, timing.openingTime);
-            formData.append(`timings[${index}][closingTime]`, timing.closingTime);
-        });
-    
-        // Send the form data to the backend
-        const token = localStorage.getItem('token');
-        try {
-            const response = await axios.post('/api/restaurantRegister', formData, {
-                headers: {
-                    Authorization: token,
-                    'Content-Type': 'multipart/form-data' // Important for file uploads
-                }
-            });
-            console.log(response.data);
-            restaurantId = response.data._id
-            if(response.data.status == 'approved'){
-                navigate(`/restaurant/${restaurantId}`)
+        runValidator()
+        console.log(errors);
+        if(Object.keys(errors).length == 0){
 
-            }else{
-                navigate('/register/thankyou')
+
+            // Create a new FormData object
+            const formData = new FormData();
+        
+            // Append text fields to FormData
+            formData.append('name', eLoc.name);
+            formData.append('description', restaurant.description);
+            formData.append('gstNo', restaurant.gstIn);
+            formData.append('geo[lat]', lattitude);
+            formData.append('geo[lon]', longitude);
+            
+            // Append file fields to FormData
+            if (fssai) {
+                formData.append('licenseNumber', fssai);
             }
+            if (selectedFile) {
+                formData.append('image', selectedFile);
+            }
+        
+            // Append address details
+            formData.append('address[street]', street);
+            formData.append('address[area]', area);
+            formData.append('address[city]', city);
+            formData.append('address[state]', state);
+            formData.append('address[pincode]', pincode);
+        
+            // Append timings data
+            timings.forEach((timing, index) => {
+                formData.append(`timings[${index}][dayOfWeek]`, timing.dayOfWeek);
+                formData.append(`timings[${index}][openingTime]`, timing.openingTime);
+                formData.append(`timings[${index}][closingTime]`, timing.closingTime);
+            });
+        
+            // Send the form data to the backend
+            const token = localStorage.getItem('token');
+            const data = await restaurantRegistration(formData,token)
+           
+                
+                console.log(data);
+                restaurantId = data._id
+                if(data.status == 'approved'){
+                    navigate(`/restaurant/${restaurantId}`)
+    
+                }else{
+                    navigate('/register/thankyou')
+                }
+                
+                
+           
+            // Clear form fields after successful submission
+            setRestaurant({
+                gstIn: '',
+                description: ''
+            });
+            setFssai('');
+            setSelectedFile('');
+            setName('');
+            setELoc({});
+            setAddress('');
+            setStreet('');
+            setArea('');
+            setCity('');
+            setState('');
+            setPincode('');
+            setlattitude('');
+            setlongitude('');
+            setTimings([]);
+            setFormErrors({})
+            //navigate(`/restaurant/${restaurantId}`)
             
-            
-        } catch (e) {
-            console.log('err', e);
+        }else{
+            setFormErrors(errors)
         }
-        // Clear form fields after successful submission
-        setRestaurant({
-            gstIn: '',
-            description: ''
-        });
-        setFssai('');
-        setSelectedFile('');
-        setName('');
-        setELoc({});
-        setAddress('');
-        setStreet('');
-        setArea('');
-        setCity('');
-        setState('');
-        setPincode('');
-        setlattitude('');
-        setlongitude('');
-        setTimings([]);
-        //navigate(`/restaurant/${restaurantId}`)
         
     }
     
@@ -109,7 +146,7 @@ export default function Home() {
     }
 
     function handleFileChange(e) {
-        // Handle file input change
+
         const file = e.target.files[0];
         setFssai(file);
     }
@@ -118,13 +155,12 @@ export default function Home() {
         const file = e.target.files[0];
         setSelectedFile(file);
     
-        // Handle image change
     }
 
     async function handleAddress() {
         console.log(address);
         try {
-            const response = await axios.get('/api/search', {
+            const response = await axiosInstance.get('/api/search', {
                 params: {
                     id: address
                 }
@@ -188,6 +224,8 @@ export default function Home() {
                                 
                                 id='restaurantName'
                             />
+                            
+                        {formErrors.name&&<span style={{color:'red'}}>{formErrors.name}</span>}
                         </div>
                         <div className="mb-3">
                             <label htmlFor="gstIn" className="form-label">Enter GSTIN</label>
@@ -200,6 +238,8 @@ export default function Home() {
                                 id='gstIn'
                                 
                             />
+                     {formErrors.gstIn&&<span style={{color:'red'}}>{formErrors.gstIn}</span>}
+
                         </div>
                         <div className="mb-3">
                             <label htmlFor="fssai" className="form-label">FSSAI License</label>
@@ -241,6 +281,8 @@ export default function Home() {
                                 name='street'
                                 id='street'
                             />
+                         {formErrors.street&&<span style={{color:'red'}}>{formErrors.street}</span>}
+
                         </div>
                         <div className="mb-3">
                             <label htmlFor="area" className="form-label">Area</label>
@@ -252,6 +294,8 @@ export default function Home() {
                                 name='area'
                                 id='area'
                             />
+                    {formErrors.area&&<span style={{color:'red'}}>{formErrors.area}</span>}
+
                         </div>
                         <div className="mb-3">
                             <label htmlFor="city" className="form-label">City</label>
@@ -261,6 +305,8 @@ export default function Home() {
                                 readOnly
                                 id='city'
                             />
+                         {formErrors.city&&<span style={{color:'red'}}>{formErrors.city}</span>}
+
                         </div>
                         <div className="mb-3">
                             <label htmlFor="state" className="form-label">State</label>
@@ -272,6 +318,8 @@ export default function Home() {
                                 readOnly
                                 name="state"
                             />
+                         {formErrors.state&&<span style={{color:'red'}}>{formErrors.state}</span>}
+
                         </div>
                         <div className="mb-3">
                             <label htmlFor="pincode" className="form-label">Enter Pincode</label>
@@ -282,6 +330,7 @@ export default function Home() {
                                 readOnly
                                 id="pincode"
                             />
+                         {formErrors.pincode&&<span style={{color:'red'}}>{formErrors.pincode}</span>}
                         </div>
                     </fieldset>
                     {/* Timing Details */}
@@ -324,8 +373,11 @@ export default function Home() {
                 required
             />
         </div>
+
     ))}
-    <button type="button" onClick={addTiming}>Add Timing</button>
+
+    <button type="button" onClick={addTiming}>Add Timing</button><br/>
+ {formErrors.timings&&<span style={{color:'red'}}>{formErrors.timings}</span>}
 </fieldset>
 
                     <fieldset className="col-md-12">
@@ -341,6 +393,8 @@ export default function Home() {
                                 name="description"
                                 placeholder="Enter description"
                             />
+                     {formErrors.description&&<span style={{color:'red'}}>{formErrors.description}</span>}
+
                         </div>
                     </fieldset>
 

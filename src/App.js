@@ -1,27 +1,31 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React, { useEffect, useReducer } from 'react';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Login from './components/Login/Signin';
-import Registration from './components/Register Components/Register';
-import Terms from './components/Register Components/Terms';
+import Login from './components/login/Signin';
+import Registration from './components/signup/Register';
+//import Registration from './components/registration/Register'
 import AdminDashboard from './components/admin/AdminDashboard';
-import ForgotPassword from './components/forgotPassword/ForgotPassword';
-import ResetPassword from './components/forgotPassword/resetPassword';
-import GuestHome from './components/guestHome/Home';
-import Profile from './components/guestHome/profile';
+import Profile from './components/guest/profile';
 import Header from './components/header/Header';
-import AddTable from './components/pages/AddTable';
 import LandingPage from './components/pages/LandingPage';
-import RestaurantDashboard from './components/restaurantHome/Dashboard';
-import RestaurantHome from './components/restaurantHome/Home';
-import Rejected from './components/restaurantHome/Rejected';
-import ThankYou from './components/restaurantHome/ThankYou';
+import ForgotPassword from './components/password/ForgotPassword';
+import UpdatePassword from './components/password/UpdatePassword';
+import ResetPassword from './components/password/resetPassword';
+import Rejected from './components/restaurant/registration/Rejected';
+import ThankYou from './components/restaurant/registration/ThankYou';
+import RestaurantHome from './components/restaurant/registration/registerForm';
+import About from './components/restaurant/restaurantOwner/About';
+import AddMenu from './components/restaurant/restaurantOwner/AddMenu';
+import AddTable from './components/restaurant/restaurantOwner/AddTable';
+import Bookings from './components/restaurant/restaurantOwner/Bookings';
+import RestaurantDashboard from './components/restaurant/restaurantOwner/Manage';
+import UpdateRestaurant from './components/restaurant/restaurantOwner/UpdateRestaurant';
+import Terms from './components/signup/Terms';
 import axiosInstance from './config/axios';
 import restaurantContext from './contextApi/restaurantContext';
 import userContext from './contextApi/userContext';
-import restaurantReducer from './useReducerHook-reducers/restaurantReducer';
-import userReducer from './useReducerHook-reducers/userRedcer';
-
+import restaurantReducer from './reducer-hook/restaurantReducer';
+import userReducer from './reducer-hook/userRedcer';
 
 
 
@@ -29,7 +33,6 @@ import userReducer from './useReducerHook-reducers/userRedcer';
 function App() {
     const [userState, userDispatch] = useReducer(userReducer, { userDetails: {} });
     const [restaurantState, restaurantDispatch] = useReducer(restaurantReducer, { restaurantOwner:{},allRestaurants: []});
-
 
     useEffect(() => {
         (async () => {
@@ -105,14 +108,18 @@ function App() {
                     <Route path='/admindashboard' element={<AdminDashboard />} />
                     <Route path='/forgotPassword' element={<ForgotPassword />} />
                     <Route path='/resetPassword/:id/:token' element={<ResetPassword />} />
-                    <Route path='/guestHome' element={<GuestHome />} />
                     <Route path='userprofile' element={<Profile/>}/>
-                    <Route path='/guestHome' element={<GuestHome />} />
                     <Route path='/addtable' element={<AddTable />} />
                     <Route path='/home' element={<LandingPage />} />
                     <Route path='/register/thankyou' element={<ThankYou />} />
                     <Route path='/rejected' element={<Rejected />} />
-                    <Route path='/restaurant/:restaurantId' element={<RestaurantDashboard />} />
+                    
+                <Route path='/restaurant/manage' element={<RestaurantDashboard />} />
+                <Route path='/addmenu' element={<AddMenu/>} />
+                <Route path='/updatepassword' element={<UpdatePassword/>} />
+                <Route path='/updaterestaurant' element={<UpdateRestaurant/>} />
+                <Route path='/aboutrestaurant' element={<About/>} />
+                <Route path='/bookings' element={<Bookings/>} />
                 </Routes>
             </div>
             </restaurantContext.Provider>

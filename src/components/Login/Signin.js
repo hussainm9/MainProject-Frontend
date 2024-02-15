@@ -8,7 +8,6 @@ import isEmail from 'validator/lib/isEmail';
 import axios from '../../config/axios';
 import './Signin.css';
 
-
 function Login() {
 
   const navigate = useNavigate()
@@ -74,7 +73,7 @@ function Login() {
                 console.log(restaurant.data);
                 if(status == 'approved'){
                   console.log('approved');
-                  navigate(`/restaurant/${id}`)
+                  navigate(`/restaurant/dash`)
 
 
                 }else if(status == 'rejected'){
