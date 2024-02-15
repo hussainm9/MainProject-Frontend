@@ -5,7 +5,7 @@ import { BiSearch } from 'react-icons/bi';
 import { CgProfile } from "react-icons/cg";
 import { Link, useNavigate } from 'react-router-dom';
 import userContext from '../../contextApi/userContext';
-import ProfileDropdown from '../guestHome/profileDropdown';
+import ProfileDropdown from '../guest/profileDropdown';
 import logo from "../images/logo.png";
 import './header.css';
 
@@ -17,7 +17,7 @@ export default function Header() {
 
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
-  console.log(token);
+  console.log(token,'headers page');
 
   const handleLogout = (e) => {
     e.preventDefault();
@@ -43,6 +43,8 @@ export default function Header() {
 
   return (
     <>
+    
+    
       <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-lg p-3 mb-5 bg-body rounded">
         <div className="container">
           <Link className="navbar-brand" href="/home">
@@ -66,21 +68,31 @@ export default function Header() {
                 </div>
               </li>
 
-              <li className="nav-item pe-5">
+  
+
+              {role === 'guest' || !token ? (
+                <div>
+                              <li className="nav-item pe-5">
                 <Link className="nav-link active" aria-current="page" href="about">About</Link>
               </li>
               <li className="nav-item pe-5">
                 <Link className="nav-link active" aria-current="page" href="home">Home</Link>
               </li>
 
-              {role === 'guest' || !token ? (
                 <li className="nav-item pe-3">
                   <Link className="nav-link active" href="book">Book Table</Link>
                 </li>
+                </div>
               ) : null}
 
               {role === 'restaurantOwner' ? (
                 <>
+                      <li className="nav-item pe-5">
+                <Link to='/aboutrestaurant' className="nav-link active" aria-current="page" href="about">About</Link>
+              </li>
+              <li className="nav-item pe-5">
+                <Link to='/bookings' className="nav-link active" aria-current="page" href="home">Home</Link>
+              </li>
                   <li className="nav-item pe-3">
                     <Link className="nav-link active" aria-current="page" to="/addtable">Add Table</Link>
                   </li>
@@ -88,7 +100,7 @@ export default function Header() {
                     <Link className="nav-link active" aria-current="page" to="/addmenu">Add Menu</Link>
                   </li>
                   <li className="nav-item pe-3">
-                    <Link className="nav-link active" aria-current="page" to="/restaurant/:restaurantId">Dashboard</Link>
+                    <Link className="nav-link active" aria-current="page" to="/restaurant/manage">Manage</Link>
                   </li>
                 </>
               ) : null}
@@ -111,6 +123,7 @@ export default function Header() {
           </div>
         </div>
       </nav>
+    
     </>
   );
 }
