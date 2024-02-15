@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from '../../config/axios';
 import './Home.css';
 
-export default function Home() {
+export default function ResHome() {
     const navigate = useNavigate()
     const [restaurant, setRestaurant] = useState({
         gstIn: '',

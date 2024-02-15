@@ -113,7 +113,7 @@ function Registration() {
             try {
                 const response = await axios.post('/api/register', formData)
                 console.log(response.data);
-                swal("success", "Registred sucessfully", "success")
+                swal("Success", `Welcome ${formData.username}`, "success")
                 setServerErrors([])
                 navigate('/login')
             } catch (e) {

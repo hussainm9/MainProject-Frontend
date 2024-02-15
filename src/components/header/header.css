@@ -16,6 +16,11 @@
   align-items: center;
   box-sizing: 0 10px 25px rgba(0, 0, 0, 0.3);
 }
+.bg{
+  
+    background: #8FD3F4; 
+}
+
 
 .box:hover input {
   width: 300px;
