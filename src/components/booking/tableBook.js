@@ -221,7 +221,9 @@ export default function TableBook() {
                         <Loading />
                     ) : (
                         <div className="row">
-                            {menuData.map((ele) => (
+                            {menuData
+                            .filter(item => isVeg ? item.isVeg === 'Veg' : item.isVeg === 'Non Veg')
+                            .map((ele) => (
                                 <div className="col-md-4 mb-4" key={ele._id}>
                                     <div className="card">
                                         <img

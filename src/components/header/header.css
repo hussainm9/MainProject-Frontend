@@ -1,32 +1,32 @@
 /* header.css */
 
-/* Apply a reset to remove default margin and padding */
+
 body, html {
   margin: 0;
   padding: 0;
 }
 
-/* Set a background color for the header */
+
 .header {
-  background-color: #8fd3f4; /* Light blue background */
+  background-color: #8fd3f4;
 }
 
-/* Container styles */
+
 .container {
-  max-width: 1200px; /* Adjust max-width as needed */
-  margin: 0 auto; /* Center the container */
-  padding: 20px; /* Add some padding for spacing */
+  max-width: 1200px; 
+  margin: 0 auto; 
+  padding: 20px; 
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-/* Logo styles */
+
 .logo {
-  max-width: 150px; /* Adjust max-width as needed */
+  max-width: 150px; 
 }
 
-/* Navigation styles */
+
 .nav_ul {
   list-style: none;
   margin: 0;
@@ -36,21 +36,21 @@ body, html {
 }
 
 .nav_ul li {
-  margin-right: 20px; /* Adjust spacing between navigation items */
+  margin-right: 20px; 
 }
 
 .nav_link {
-  color: #333; /* Dark text color */
+  color: #333; 
   text-decoration: none;
   font-weight: bold;
-  transition: color 0.3s ease; /* Smooth transition for color change */
+  transition: color 0.3s ease; 
 }
 
 .nav_link:hover {
-  color: #555; /* Darker text color on hover */
+  color: #555;
 }
 
-/* Search box styles */
+
 .search_box {
   position: relative;
 }
@@ -61,12 +61,12 @@ body, html {
   padding: 0 40px 0 10px;
   border: none;
   border-radius: 20px;
-  background-color: #fff; /* White background */
-  transition: width 0.5s ease; /* Smooth transition for width change */
+  background-color: #fff; 
+  transition: width 0.5s ease; 
 }
 
 .search_input:focus {
-  width: 200px; /* Expand the input field on focus */
+  width: 200px; 
 }
 
 .search_icon {
@@ -77,7 +77,7 @@ body, html {
   cursor: pointer;
 }
 
-/* Profile dropdown styles */
+
 .profile_dropdown {
   position: relative;
 }
@@ -86,15 +86,15 @@ body, html {
   position: absolute;
   top: 100%;
   right: 0;
-  background-color: #fff; /* White background */
+  background-color: #fff; 
   border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Shadow effect */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); 
   padding: 10px;
   display: none;
 }
 
 .profile_dropdown_menu.show {
-  display: block; /* Show the dropdown menu */
+  display: block; 
 }
 
 .profile_dropdown_menu_item {
@@ -105,24 +105,24 @@ body, html {
 /* Media query for responsiveness */
 @media (max-width: 768px) {
   .container {
-    flex-direction: column; /* Stack items vertically on smaller screens */
-    align-items: flex-start; /* Align items to the start */
+    flex-direction: column; 
+    align-items: flex-start; 
   }
 
   .nav_ul {
-    margin-top: 20px; /* Add space between logo and navigation on smaller screens */
+    margin-top: 20px; 
   }
 
   .nav_ul li {
-    margin-right: 0; /* Remove margin between navigation items */
-    margin-bottom: 10px; /* Add space between navigation items */
+    margin-right: 0; 
+    margin-bottom: 10px;
   }
 
   .search_input {
-    width: 100%; /* Set input field width to 100% on smaller screens */
+    width: 100%; 
   }
 
   .profile_dropdown_menu {
-    right: 20px; /* Adjust position of profile dropdown menu */
+    right: 20px; /
   }
 }

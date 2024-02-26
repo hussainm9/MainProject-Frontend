@@ -3,8 +3,8 @@
 .form-control {
     max-width: 200px;
      /* Adjust this value according to your requirements */
-}
-.wrapper {
+
+/* .wrapper {
     background-image: url('../../../public//');
     background-size: cover;
     background-position: center;
@@ -14,4 +14,4 @@
     justify-content:center;
     margin-top: 0px;
   
-  } */
+  }  */
