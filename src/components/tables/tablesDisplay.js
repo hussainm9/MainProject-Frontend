@@ -1,27 +1,30 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { asygetTables, clearTableData } from '../../redux/actions/tableAction'
 import { useDispatch, useSelector } from 'react-redux';
 import { jwtDecode } from 'jwt-decode'
 import Loading from '../loading';
+import './tableDisplay.css'
 
 export default function TableDisplay() {
     const { restaurantId } = useParams();
     const dispatch = useDispatch();
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         dispatch(asygetTables({ restaurantId }));
+        setLoading(false)
         return () => {
             dispatch(clearTableData());
         };
     }, [dispatch, restaurantId]);
 
     const tableData = useSelector((state) => state.table.data);
-    const loading = useSelector((state) => state.table.loading);
+
     const error = useSelector((state) => state.table.error);
-    const token=localStorage.getItem('token')
-    const decodedToken=jwtDecode(token)
-    const userId=decodedToken.id
+    const token = localStorage.getItem('token')
+    const decodedToken = jwtDecode(token)
+    const userId = decodedToken.id
 
     if (error) {
         return (
@@ -32,8 +35,7 @@ export default function TableDisplay() {
     }
 
     return (
-        <div>
-            
+        <div className="container">
             <div className='row'>
                 {loading ? (
                     <Loading />
@@ -42,7 +44,7 @@ export default function TableDisplay() {
                         <div className="col-md-4 mb-4" key={ele._id}>
                             <div className="card">
                                 <img
-                                    src={`http://localhost:3786/upload/images/${ele.image}`}
+                                    src={`${ele.image}`}
                                     className="card-img-top"
                                     alt="logo"
                                 />

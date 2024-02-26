@@ -1,0 +1,61 @@
+/* TableDisplay.css */
+
+/* Styles for the container div */
+.container {
+    padding: 0 20px; /* Adjust the padding values as needed */
+}
+
+/* Styles for the card */
+.card {
+    position: relative; /* Ensure positioning context for absolute elements */
+    border-radius: 8px; /* Adjust the border radius as needed */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add initial box shadow for card */
+    transition: box-shadow 0.3s ease; /* Add transition for box shadow */
+    overflow: hidden; /* Hide overflow to prevent content from extending outside card */
+}
+
+.card:hover {
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2); /* Increase box shadow on hover */
+}
+
+.card-img-container {
+    position: relative; /* Ensure positioning context for absolute elements */
+    overflow: hidden; /* Hide overflow to prevent image from extending outside container */
+    height: 200px; /* Set a fixed height for the image container */
+}
+
+.card-img-top {
+    border-top-left-radius: 8px; /* Adjust border radius for top left corner */
+    border-top-right-radius: 8px; /* Adjust border radius for top right corner */
+    width: 100%; /* Set width to 100% to ensure image fills container */
+    height: 200px; /* Set a fixed height for the image */
+    object-fit: cover; /* Ensure the image covers the entire container */
+    object-position: center; /* Center the image within the container */
+}
+
+.card-img-top:hover {
+    transform: scale(1.1); /* Increase scale of image on hover */
+}
+
+.card-body {
+    padding: 20px; /* Add padding for card body */
+}
+
+.card-title {
+    font-size: 1.25rem; /* Adjust font size for card title */
+    margin-bottom: 10px; /* Add margin bottom to card title */
+}
+
+.card-body p {
+    margin-bottom: 5px; /* Add margin bottom to paragraphs in card body */
+}
+
+.btn-primary {
+    background-color: #007bff; /* Change background color for primary button */
+    border-color: #007bff; /* Change border color for primary button */
+}
+
+.btn-primary:hover {
+    background-color: #0056b3; /* Change background color for primary button on hover */
+    border-color: #0056b3; /* Change border color for primary button on hover */
+}

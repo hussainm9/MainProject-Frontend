@@ -6,11 +6,10 @@ import swal from 'sweetalert';
 import { v4 as uuidv4 } from 'uuid';
 import isEmail from 'validator/lib/isEmail';
 import axios from '../../config/axios';
-import './Signin.css';
+// import './Signin.css';
 import { useDispatch, useSelector } from 'react-redux';
 import {Row,Col} from 'reactstrap'
 // import { loginSuccess } from '../../redux/actions/userAction';
-
 
 function Login() {
 
@@ -85,7 +84,7 @@ function Login() {
                 console.log(restaurant.data);
                 if(status == 'approved'){
                   console.log('approved');
-                  navigate(`/restaurant/${id}`)
+                  navigate(`/restaurant/dash`)
 
 
                 }else if(status == 'rejected'){

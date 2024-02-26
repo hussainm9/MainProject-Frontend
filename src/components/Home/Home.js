@@ -1,5 +1,5 @@
 import React from 'react'
-import RestaurantDisplay from '../restaurantHome/RestaurantDisplay'
+import RestaurantDisplay from '../restaurant/registration/RestaurantDisplay'
 import './home.css'
 export default function Home() {
   return (

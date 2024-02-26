@@ -3,8 +3,7 @@ import _ from 'lodash';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import isEmail from 'validator/lib/isEmail';
-import axios from '../../config/axios';
-
+import {forgotPassword} from '../../services/passwordService'
 
 
 function ForgotPassword() {
@@ -36,10 +35,11 @@ function ForgotPassword() {
       console.log('No errors found');
       try {
         const formData = _.pick(user, 'email');
-        const response = await axios.post('/api/user/forgotPassword', formData);
+        const data =await forgotPassword(formData) 
+       
         console.log('worked');
-        console.log(response.data.status);
-        if(response.data.status == 'Email sent successfully'){
+        console.log(data.status);
+        if(data.status == 'Email sent successfully'){
             navigate('/login')
         }
  

@@ -1,48 +1,128 @@
-* {
-  margin: auto;
-  padding: auto;
-}
-.bg-dark-pink {
-  background-color:dimgray 
+/* header.css */
+
+/* Apply a reset to remove default margin and padding */
+body, html {
+  margin: 0;
+  padding: 0;
 }
 
-.box {
-  height: 40px;
+/* Set a background color for the header */
+.header {
+  background-color: #8fd3f4; /* Light blue background */
+}
+
+/* Container styles */
+.container {
+  max-width: 1200px; /* Adjust max-width as needed */
+  margin: 0 auto; /* Center the container */
+  padding: 20px; /* Add some padding for spacing */
   display: flex;
-  cursor: pointer;
-  padding: 10px 20px;
-  background-color: aliceblue;
-  border-radius: 30px;
+  justify-content: space-between;
   align-items: center;
-  box-sizing: 0 10px 25px rgba(0, 0, 0, 0.3);
-}
-.bg{
-  
-    background: #8FD3F4; 
 }
 
-
-.box:hover input {
-  width: 300px;
+/* Logo styles */
+.logo {
+  max-width: 150px; /* Adjust max-width as needed */
 }
 
-.box input {
-  width: 0;
-  outline: none;
-  border: none;
-  font-weight: 500;
-  transition: 0.8s;
-  background-color: transparent;
-}
-
-.box a.fas {
-  color: burlywood;
-  font-size: 18px;
+/* Navigation styles */
+.nav_ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
 }
 
 .nav_ul li {
-  padding: 0 0.7rem;
+  margin-right: 20px; /* Adjust spacing between navigation items */
 }
-.rounded {
-  border-radius: 50%;
+
+.nav_link {
+  color: #333; /* Dark text color */
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s ease; /* Smooth transition for color change */
+}
+
+.nav_link:hover {
+  color: #555; /* Darker text color on hover */
+}
+
+/* Search box styles */
+.search_box {
+  position: relative;
+}
+
+.search_input {
+  width: 0;
+  height: 40px;
+  padding: 0 40px 0 10px;
+  border: none;
+  border-radius: 20px;
+  background-color: #fff; /* White background */
+  transition: width 0.5s ease; /* Smooth transition for width change */
+}
+
+.search_input:focus {
+  width: 200px; /* Expand the input field on focus */
+}
+
+.search_icon {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+/* Profile dropdown styles */
+.profile_dropdown {
+  position: relative;
+}
+
+.profile_dropdown_menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: #fff; /* White background */
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Shadow effect */
+  padding: 10px;
+  display: none;
+}
+
+.profile_dropdown_menu.show {
+  display: block; /* Show the dropdown menu */
+}
+
+.profile_dropdown_menu_item {
+  margin: 5px 0;
+  cursor: pointer;
+}
+
+/* Media query for responsiveness */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column; /* Stack items vertically on smaller screens */
+    align-items: flex-start; /* Align items to the start */
+  }
+
+  .nav_ul {
+    margin-top: 20px; /* Add space between logo and navigation on smaller screens */
+  }
+
+  .nav_ul li {
+    margin-right: 0; /* Remove margin between navigation items */
+    margin-bottom: 10px; /* Add space between navigation items */
+  }
+
+  .search_input {
+    width: 100%; /* Set input field width to 100% on smaller screens */
+  }
+
+  .profile_dropdown_menu {
+    right: 20px; /* Adjust position of profile dropdown menu */
+  }
 }
