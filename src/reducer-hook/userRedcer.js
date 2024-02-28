@@ -5,16 +5,14 @@ const userReducer = (state, action) => {
       return { ...state, userDetails: action.payload };
 
     case 'UPDATE_DETAILS':
-      console.log(action.value)
+      console.log(action.value, 'update deails,useReducer')
+      console.log(action.field);
       return {
         ...state,
-        userDetails: {
-          ...state.userDetails,
-          [action.field]: action.value,
-        },
+        userDetails: action.value,
       };
     case 'CLEAR_DETAILS':
-      return {...state,userDetails:{}}
+      return { ...state, userDetails: {} }
 
     default:
       return state;

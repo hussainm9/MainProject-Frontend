@@ -1,7 +1,7 @@
-import React, { useContext, useState, useEffect } from 'react';
-import 'bootstrap/dist/css/bootstrap.css';
-import userContext from '../../contextApi/userContext';
 import axios from 'axios';
+import 'bootstrap/dist/css/bootstrap.css';
+import React, { useContext, useEffect, useState } from 'react';
+import userContext from '../../contextApi/userContext';
 
 export default function Profile() {
   const { userState, userDispatch } = useContext(userContext);
@@ -28,7 +28,7 @@ export default function Profile() {
 
   const handleSave = async () => {
     try {
-      
+
       const userId = userState.userDetails._id;
       console.log(userId);
 
@@ -41,9 +41,14 @@ export default function Profile() {
           },
         }
       );
-      setFormData(updateUserDetails.data)
+      console.log(updateUserDetails.data, 'userprofile');
+      setFormData({
+        username: updateUserDetails.data.username,
+        email: updateUserDetails.data.email,
+        mobile: updateUserDetails.data.mobile,
+      })
       userDispatch({
-        type:({ type: 'CLEAR_DETAILS', payload: updateUserDetails.data })
+        type: ({ type: 'CLEAR_DETAILS', payload: updateUserDetails.data })
 
       })
       userDispatch({
