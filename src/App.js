@@ -10,7 +10,7 @@ import Profile from './components/guest/profile';
 import ForgotPassword from './components/password/ForgotPassword';
 import ResetPassword from './components/password/resetPassword';
 import Header from './components/header/Header';
-import LandingPage from './components/pages/LandingPage';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import UpdatePassword from './components/password/UpdatePassword';
 import Rejected from './components/restaurant/registration/Rejected';
 import ThankYou from './components/restaurant/registration/ThankYou';
@@ -33,6 +33,7 @@ import userReducer from './reducer-hook/userRedcer';
 import Success from './components/payment/paymentSuccess';
 import Failure from './components/payment/paymentFailure';
 import Display from './components/pages/search';
+import Footer from './components/Footer/footer';
 
 
 function App() {
@@ -105,7 +106,6 @@ function App() {
                             <Route path='/resetPassword/:id/:token' element={<ResetPassword />} />
                             <Route path='/userprofile' element={<Profile />} />
                             <Route path='/addtable' element={<AddTable />} />
-                            <Route path='/home' element={<LandingPage />} />
                             <Route path='/register/thankyou' element={<ThankYou />} />
                             <Route path='/rejected' element={<Rejected />} />
                             <Route path='/restaurant/manage' element={<RestaurantDashboard />} />
@@ -125,6 +125,7 @@ function App() {
                             <Route path='/failure' element={<Failure />} />
                             
                         </Routes>
+                        <Footer/>
                         <ToastContainer
                             position="top-center"
                             autoClose={2000} 

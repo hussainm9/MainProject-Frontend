@@ -21,7 +21,9 @@ export const asyncCreateBooking = (userId, restaurantId, tableId, book) => {
                     'Content-Type': 'application/json'
                 },
                 data: JSON.stringify(book)
+
             });
+            
             dispatch(createBooking(response.data));
             console.log(response.data, 'book');
         } catch (e) {

@@ -15,7 +15,8 @@ export default function Header() {
   const [isSmallScreen, setIsSmallScreen] = useState(false);
 
   const dispatch = useDispatch();
-  const { user } = useSelector(state => state.user);
+  const {user}  = useSelector(state => state.user);
+  
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -53,8 +54,8 @@ export default function Header() {
   const toggleProfileDropdown = () => {
     setShowProfileDropdown(!showProfileDropdown);
   };
-  
-  const token=localStorage.getItem('token');
+
+  const token = localStorage.getItem('token');
 
   useEffect(() => {
     if (token) {
@@ -69,21 +70,17 @@ export default function Header() {
     }
   }, [token]);
 
-  useEffect(() => {
-    dispatch(getUser())
-  }, [dispatch]);
+  
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-lg p-3 mb-5 me-3 bg-body rounded">
+    <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-lg p-3 mb-5 me-3 bg-body rounded w-100" >
       <div className="container">
         <Link className="navbar-brand" to="/home">
-          <img src={logo} alt="Logo" className="logo"  style={{width:'150px'}}/>
+          <img src={logo} alt="Logo" className="logo" style={{ width: '150px' }} />
         </Link>
-        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span className="navbar-toggler-icon"></span>
-        </button>
+        
         <div className="collapse navbar-collapse justify-content-between" id="navbarNav" >
-          <ul className={`navbar-nav ${isSmallScreen ? 'ms-auto' : 'me-auto'} nav_ul` }>
+          <ul className={`navbar-nav ${isSmallScreen ? 'ms-auto' : 'me-auto'} nav_ul`}>
             <li className="nav-item" style={{ marginRight: '15px' }}>
               <form onSubmit={handleSubmit} className={`input-group ${isSmallScreen ? 'ms-4' : 'me-4'}`}>
                 <input
@@ -140,6 +137,7 @@ export default function Header() {
               {showProfileDropdown && (
                 <div className='position-absolute top-100 start-0 bg-white p-1 shadow rounded'>
                   <p onClick={handleLogout} className='whitespace-nowrap cursor-pointer fs-6'>Logout</p>
+                  <p onClick={() => navigate('/profile')} className='whitespace-nowrap cursor-pointer text-sm'>Profile</p>
                 </div>
               )}
             </div>

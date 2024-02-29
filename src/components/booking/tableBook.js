@@ -17,6 +17,7 @@ import { asyncGetMenu } from '../../redux/actions/menuAction';
 import { asyncgetOneTable } from '../../redux/actions/tableAction';
 import { asyncCreateBooking } from '../../redux/actions/bookingAction';
 import Loading from '../pages/loading';
+import { Dropdown } from 'react-bootstrap'
 
 export default function TableBook() {
     const { userId, restaurantId, tableId } = useParams();
@@ -24,6 +25,7 @@ export default function TableBook() {
     const [isVeg, setIsVeg] = useState(true);
     const [click, setClick] = useState(false);
     const [loading, setLoading] = useState(true)
+    const [sortBy, setSortBy] = useState('asc')
 
     const dispatch = useDispatch();
     const tableData = useSelector((state) => state.table.table);
@@ -38,6 +40,8 @@ export default function TableBook() {
         toast.success('menu add successfully')
         setClick(true)
     }
+
+
 
     const validationSchema = Yup.object().shape({
         startTime: Yup.date().required('Start time is required'),
@@ -76,17 +80,22 @@ export default function TableBook() {
             console.log(userId, restaurantId, tableId, 'ids1')
 
             try {
-                // Dispatch asyncCreateBooking action and pass the booking data
-                dispatch(asyncCreateBooking(userId, restaurantId, tableId, data));
-                console.log('coming')
-
-                await makePayment()
+                const createdBooking = await dispatch(asyncCreateBooking(userId, restaurantId, tableId, data));
+                console.log('Booking created successfully:', createdBooking);
+                if (createdBooking) {
+                    
+                    makePayment(createdBooking);
+                } else {
+                    // Handle case where booking creation failed
+                    toast.error('Booking creation failed');
+                }
+                
             } catch (error) {
                 console.error("Error creating booking:", error);
-                // Handle booking creation error here
                 toast.error('Error creating booking');
             }
         }
+        
 
 
 
@@ -94,7 +103,7 @@ export default function TableBook() {
     });
 
     const totalHours = moment(formik.values.endTime).diff(moment(formik.values.startTime), 'hours') + 1;
-    
+
 
     useEffect(() => {
         dispatch(asyncgetOneTable({ tableId }));
@@ -107,7 +116,7 @@ export default function TableBook() {
         return () => clearTimeout(timeout)
     }, [dispatch, tableId, restaurantId]);
 
-    
+
 
     const handleRemove = (id) => {
         dispatch(removeMenu(id));
@@ -125,17 +134,25 @@ export default function TableBook() {
             dispatch(removeMenu(ele._id));
         }
     };
+    const calculateTotalAmount = (items) => {
+        return items.reduce((total, item) => {
+            const price = Number(item.price);
+            const quantity = Number(item.quantity);
+            return total + (price * quantity);
+        }, 0);
+    }
+
+    const menuTotal = calculateTotalAmount(menu);
+    const tableTotal = totalHours * table[0].advanceAmount;
+    const totalAmount = menuTotal + tableTotal;
+    console.log(totalAmount, 'total frontp')
 
 
-    const makePayment = async () => {
+    const makePayment = async (createdBooking) => {
         const stripe = await loadStripe("pk_test_51Okol7SGpEFD34rozKCvFhDvv3Nx5Qmmq6AdqBlOXQASEm5Yeplle92xKF46Jx6piaUHnkfjVkJcSo2d9AGt6OBf00bnDIzwiU");
 
-        const totalAmount = menu.reduce((total, item) => {
-            return total + (item.price * item.quantity);
-        }, 0)
-
         const body = {
-            booking: bookings,
+            booking: createdBooking,
             menus: menu,
             totalAmount: totalAmount
         };
@@ -169,17 +186,19 @@ export default function TableBook() {
         }
     };
 
-    const calculateTotalAmount = (items) => {
-        return items.reduce((total, item) => {
-            const price = Number(item.price);
-            const quantity = Number(item.quantity);
-            return total + (price * quantity);
-        }, 0);
-    }
+    const handleSortChange = (value) => {
+        setSortBy(value);
+    };
 
-    const menuTotal = calculateTotalAmount(menu);
-    const tableTotal = totalHours * table[0].advanceAmount;
-    const totalAmount = menuTotal + tableTotal;
+    const sortedMenuData = menuData.sort((a, b) => {
+        if (sortBy === 'asc') {
+            return a.price - b.price;
+        } else {
+            return b.price - a.price;
+        }
+    })
+
+
 
     return (
         <div>
@@ -216,33 +235,48 @@ export default function TableBook() {
                                 Non-Veg
                             </label>
                         </div>
+                        <div className="row">
+                            <div className="col-auto">
+                                <Dropdown>
+                                    <Dropdown.Toggle variant="primary" id="dropdown-basic" size="sm">
+                                        Sort By: {sortBy === 'asc' ? 'Price Low To High' : 'Price High To Low'}
+                                    </Dropdown.Toggle>
+
+                                    <Dropdown.Menu>
+                                        <Dropdown.Item onClick={() => handleSortChange('asc')}>Price Low To High</Dropdown.Item>
+                                        <Dropdown.Item onClick={() => handleSortChange('desc')}>Price High To Low</Dropdown.Item>
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                            </div>
+                        </div>
+
                     </div>
                     {loading ? (
                         <Loading />
                     ) : (
-                        <div className="row">
-                            {menuData
-                            .filter(item => isVeg ? item.isVeg === 'Veg' : item.isVeg === 'Non Veg')
-                            .map((ele) => (
-                                <div className="col-md-4 mb-4" key={ele._id}>
-                                    <div className="card">
-                                        <img
-                                            src={`${ele.image}`}
-                                            className="card-img-top"
-                                            alt="menu"
-                                            style={{ height: '200px', objectFit: 'cover' }} // Set a fixed height and ensure images cover the space
-                                        />
-                                        <div className="card-body" style={{ display: 'flex-row', flexDirection: 'column' }}>
-                                            <h5 className="card-title" style={{ margin: 0 }}>{ele.name}</h5>
-                                            <p style={{ margin: 0 }}>Description: {ele.description}</p>
-                                            <p style={{ margin: 0 }}>Price: {ele.price}</p>
-                                            <button className="btn btn-primary" onClick={() => send(ele)}>
-                                                Add
-                                            </button>
+                        <div className="row mt-4">
+                            {sortedMenuData
+                                .filter(item => isVeg ? item.isVeg === 'Veg' : item.isVeg === 'Non Veg')
+                                .map((ele) => (
+                                    <div className="col-md-4 mb-4" key={ele._id}>
+                                        <div className="card">
+                                            <img
+                                                src={`${ele.image}`}
+                                                className="card-img-top"
+                                                alt="menu"
+                                                style={{ height: '200px', objectFit: 'cover' }} // Set a fixed height and ensure images cover the space
+                                            />
+                                            <div className="card-body" style={{ display: 'flex-row', flexDirection: 'column' }}>
+                                                <h5 className="card-title" style={{ margin: 0 }}>{ele.name}</h5>
+                                                <p style={{ margin: 0 }}>Description: {ele.description}</p>
+                                                <p style={{ margin: 0 }}>Price: {ele.price}</p>
+                                                <button className="btn btn-primary" onClick={() => send(ele)}>
+                                                    Add
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            ))}
+                                ))}
 
                         </div>
                     )}
@@ -275,9 +309,11 @@ export default function TableBook() {
                         </div>
                         {table.map(ele => (
                             <div key={ele._id}>
+                                
                                 <label value={formik.values.noOfSeats}>Number Of Seats: {ele.noOfSeats}</label>
                                 <br />
                                 <label>Advance Amount: {totalHours * ele.advanceAmount}</label>
+                                
                             </div>
                         ))}
                         {click && (
@@ -337,7 +373,7 @@ export default function TableBook() {
                                                                 <p className='text-right'>Table Amount: <span className='ml-2 mr-2'>{totalAmount}</span></p>
                                                             </>
 
-                                                            <button type='submit' className='btn btn-success position-absolute bottom-0 end-0' >Book</button>
+                                                            <button type='submit' className='btn btn-success  bottom-0 end-0' >Book</button>
                                                         </td>
                                                     </tr>
                                                 </tfoot>
