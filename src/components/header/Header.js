@@ -3,10 +3,10 @@ import { jwtDecode } from 'jwt-decode';
 import React, { useEffect, useState } from 'react';
 import { BiSearch } from 'react-icons/bi';
 import { FaRegCircleUser } from "react-icons/fa6";
-import { Link, useNavigate } from 'react-router-dom';
-import logo from "../images/logo.png";
 import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
 import { getUser } from '../../redux/actions/userAction';
+import logo from "../images/logo.png";
 
 export default function Header() {
   const [role, setRole] = useState(null);
@@ -53,8 +53,8 @@ export default function Header() {
   const toggleProfileDropdown = () => {
     setShowProfileDropdown(!showProfileDropdown);
   };
-  
-  const token=localStorage.getItem('token');
+
+  const token = localStorage.getItem('token');
 
   useEffect(() => {
     if (token) {
@@ -77,13 +77,13 @@ export default function Header() {
     <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-lg p-3 mb-5 me-3 bg-body rounded">
       <div className="container">
         <Link className="navbar-brand" to="/home">
-          <img src={logo} alt="Logo" className="logo"  style={{width:'150px'}}/>
+          <img src={logo} alt="Logo" className="logo" style={{ width: '150px' }} />
         </Link>
         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse justify-content-between" id="navbarNav" >
-          <ul className={`navbar-nav ${isSmallScreen ? 'ms-auto' : 'me-auto'} nav_ul` }>
+          <ul className={`navbar-nav ${isSmallScreen ? 'ms-auto' : 'me-auto'} nav_ul`}>
             <li className="nav-item" style={{ marginRight: '15px' }}>
               <form onSubmit={handleSubmit} className={`input-group ${isSmallScreen ? 'ms-4' : 'me-4'}`}>
                 <input
