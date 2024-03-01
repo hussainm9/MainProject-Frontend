@@ -1,0 +1,54 @@
+/* profile.css */
+
+/* Set fixed width for profile buttons */
+.profile-button {
+    width: 100%;
+    /* Adjust as needed */
+}
+
+.profile-sidebar {
+    min-width: 200px;
+    max-width: 200px;
+    color:black
+}
+
+/* CSS for hover effect and button box */
+.profile-button:hover {
+    background-color: blue;
+    cursor: pointer;
+}
+
+/* CSS for separating buttons with borders */
+.profile-button:not(:last-child) .nav-link {
+    border-bottom: 1px solid #dee2e6;
+}
+
+/* CSS for black text color */
+.profile-button span,
+.profile-button {
+    color: black;
+}
+
+/* Adjust padding for the Change Password button */
+.profile-button.change-password .nav-link {
+    padding: 0.75rem 1rem;
+    /* Adjusted padding */
+}
+
+/* Adjust padding based on the icon size */
+.profile-button .nav-link {
+    padding: 0.75rem 1rem;
+    /* Default padding */
+}
+
+/* Adjust padding based on the larger icon size */
+.profile-button .nav-link.larger-icon {
+    padding: 0.5rem 1rem;
+    /* Adjusted padding */
+}
+
+/* Set the width of buttons relative to sidebar width */
+.profile-button {
+    width: 90%;
+    /* Adjust as needed */
+}

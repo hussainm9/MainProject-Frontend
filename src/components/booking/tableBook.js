@@ -29,9 +29,10 @@ export default function TableBook() {
 
     const dispatch = useDispatch();
     const tableData = useSelector((state) => state.table.table);
+    console.log(tableData.noOfSeats,'seats')
     const menuData = useSelector((state) => state.menu.menu);
-    const bookings = useSelector((state) => state.book);
-    console.log(bookings, 'booking')
+    // const bookings = useSelector((state) => state.book);
+    // console.log(bookings, 'booking')
     const menu = useSelector((state) => state.menu.selectMenu);
 
     const table = Array.isArray(tableData) ? tableData : [tableData];
@@ -54,56 +55,63 @@ export default function TableBook() {
         initialValues: {
             startTime: new Date(),
             endTime: new Date(),
-            noOfSeats: '',
             selectedCategory: '',
             selectedDish: ''
         },
         validationSchema: validationSchema,
         onSubmit: async (values) => {
-            const menuItems = menu.map(item => ({
-                menuId: item._id,
-                quantity: item.quantity,
-                notes: ''
-            }));
-
-            const data = {
-                noOfPeople: values.noOfSeats,
-                menuItems: menuItems,
-                startDateTime: values.startTime.toISOString(),
-                endDateTime: values.endTime.toISOString(),
-                totalAmount: totalAmount,
-                userId: userId,
-
-                restaurantId: restaurantId,
-                tableId: tableId
-            };
-            console.log(userId, restaurantId, tableId, 'ids1')
-
             try {
-                const createdBooking = await dispatch(asyncCreateBooking(userId, restaurantId, tableId, data));
-                console.log('Booking created successfully:', createdBooking);
-                if (createdBooking) {
-                    
-                    makePayment(createdBooking);
-                } else {
-                    // Handle case where booking creation failed
-                    toast.error('Booking creation failed');
-                }
+                // Validate form fields using Yup
+                await validationSchema.validate(values, { abortEarly: false });
+        
+                // Create menu items array
+                const menuItems = menu.map(item => ({
+                    menuId: item._id,
+                    quantity: item.quantity,
+                    notes: ''
+                }));
+        
+                // Prepare booking data
+                const bookingData = {
+                    noOfPeople: tableData.noOfSeats,
+                    menuItems: menuItems,
+                    startDateTime: values.startTime.toISOString(),
+                    endDateTime: values.endTime.toISOString(),
+                    totalAmount: totalAmount,
+                    userId: userId,
+                    restaurantId: restaurantId,
+                    tableId: tableId
+                };
+        
+                // Dispatch async action to create booking
+                const createdBooking = await dispatch(asyncCreateBooking(bookingData));
+                console.log(createdBooking,'create')
+        
                 
+        
+                // Make payment using booking data
+                await makePayment(createdBooking);
+        
+                // Reset form and other states if necessary
+                formik.resetForm();
+                setClick(false);
+        
+                // Additional actions after successful booking and payment
+        
             } catch (error) {
-                console.error("Error creating booking:", error);
-                toast.error('Error creating booking');
+                // Handle validation errors or other errors
+                console.error('Error:', error);
+                if (error.name === 'ValidationError') {
+                    error.errors.forEach(errorMessage => toast.error(errorMessage));
+                } else {
+                    toast.error('Table already booked for this time slot. Choose another time slot.');
+                }
             }
         }
         
-
-
-
-
     });
 
     const totalHours = moment(formik.values.endTime).diff(moment(formik.values.startTime), 'hours') + 1;
-
 
     useEffect(() => {
         dispatch(asyncgetOneTable({ tableId }));
@@ -111,9 +119,9 @@ export default function TableBook() {
         const timeout = setTimeout(() => {
             setLoading(false);
         }, 2000);
+        
 
-
-        return () => clearTimeout(timeout)
+        return () => clearTimeout(timeout);
     }, [dispatch, tableId, restaurantId]);
 
 
@@ -148,43 +156,48 @@ export default function TableBook() {
     console.log(totalAmount, 'total frontp')
 
 
-    const makePayment = async (createdBooking) => {
+    const makePayment = async (bookingCon) => {
         const stripe = await loadStripe("pk_test_51Okol7SGpEFD34rozKCvFhDvv3Nx5Qmmq6AdqBlOXQASEm5Yeplle92xKF46Jx6piaUHnkfjVkJcSo2d9AGt6OBf00bnDIzwiU");
-
+    
         const body = {
-            booking: createdBooking,
-            menus: menu,
-            totalAmount: totalAmount
+            booking: bookingCon,
         };
-        console.log(body, 'body')
-
+    
         const headers = {
             "Content-Type": "application/json",
             Authorization: localStorage.getItem('token')
         };
+    
         try {
             const response = await fetch('http://localhost:3786/api/payment-checkout', {
                 method: "POST",
                 headers: headers,
                 body: JSON.stringify(body)
             });
-            console.log(response, 'resp')
+    
             const session = await response.json();
-            console.log(session, 'id')
+    
             const result = stripe.redirectToCheckout({
                 sessionId: session.id
-
             });
-
+    
             if (result.error) {
                 console.log(result.error);
-                toast.danger('payment unsuccessfull');
+                toast.error('Payment unsuccessful');
+            } else {
+                // Payment successful, update payment status
+                await fetch('http://localhost:3786/api/payment-update', {
+                    method: "PUT",
+                    headers: headers,
+                    body: JSON.stringify({ transactionId: session.id })
+                });
+                toast.success('Payment successful');
             }
         } catch (error) {
             console.error(error);
             toast.error('Error occurred while making payment');
         }
-    };
+    }
 
     const handleSortChange = (value) => {
         setSortBy(value);
@@ -309,11 +322,11 @@ export default function TableBook() {
                         </div>
                         {table.map(ele => (
                             <div key={ele._id}>
-                                
-                                <label value={formik.values.noOfSeats}>Number Of Seats: {ele.noOfSeats}</label>
+
+                                <label >Number Of Seats: {ele.noOfSeats}</label>
                                 <br />
                                 <label>Advance Amount: {totalHours * ele.advanceAmount}</label>
-                                
+
                             </div>
                         ))}
                         {click && (

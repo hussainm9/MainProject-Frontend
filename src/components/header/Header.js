@@ -1,8 +1,7 @@
-import 'bootstrap/dist/css/bootstrap.css';
-import { jwtDecode } from 'jwt-decode';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { BiSearch } from 'react-icons/bi';
 import { FaRegCircleUser } from "react-icons/fa6";
+import { jwtDecode } from 'jwt-decode';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from "../images/logo.png";
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,9 +12,10 @@ export default function Header() {
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [isSmallScreen, setIsSmallScreen] = useState(false);
+  const profileRef = useRef(null);
 
   const dispatch = useDispatch();
-  const {user}  = useSelector(state => state.user);
+  const { user } = useSelector(state => state.user);
   
   const navigate = useNavigate();
 
@@ -34,6 +34,20 @@ export default function Header() {
 
     return () => {
       window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (profileRef.current && !profileRef.current.contains(event.target)) {
+        setShowProfileDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
 
@@ -69,8 +83,6 @@ export default function Header() {
       }
     }
   }, [token]);
-
-  
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-lg p-3 mb-5 me-3 bg-body rounded w-100" >
@@ -129,7 +141,7 @@ export default function Header() {
             ) : null}
           </ul>
           {token ? (
-            <div className="d-flex align-items-center position-relative">
+            <div ref={profileRef} className="d-flex align-items-center position-relative">
               <div className="dropdown" onClick={toggleProfileDropdown}>
                 <FaRegCircleUser className="profile-icon" style={{ fontSize: '30px' }} />
                 {user && user.username}

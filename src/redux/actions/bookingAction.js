@@ -1,33 +1,45 @@
-import axiosInstance from "../../config/axios"
-import { CREATE_BOOKING } from "./actionTypes"
+import axiosInstance from "../../config/axios";
+import { CREATE_BOOKING } from "./actionTypes";
 
+// Action creator to create a booking
 export const createBooking = (booking) => {
     return {
         type: CREATE_BOOKING,
         payload: booking
-    }
-}
+    };
+};
 
-export const asyncCreateBooking = (userId, restaurantId, tableId, book) => {
+// Asynchronous action creator to create a booking
+// Asynchronous action creator to create a booking
+export const asyncCreateBooking = (book) => {
     return async (dispatch) => {
         try {
-            console.log("User ID:", userId);
-            console.log("Restaurant ID:", restaurantId);
-            console.log("Table ID:", tableId);
-            const response = await axiosInstance(`/api/user/${userId}/restaurant/${restaurantId}/table/${tableId}/booking`, {
-                method: 'POST',
+            console.log("User ID:", book.userId);
+            console.log("Restaurant ID:", book.restaurantId);
+            console.log("Table ID:", book.tableId);
+            const userId = book.userId;
+            const restaurantId = book.restaurantId;
+            const tableId = book.tableId;
+
+            // If booking doesn't exist, proceed to create a new one
+            const response = await axiosInstance.post(`/api/user/${userId}/restaurant/${restaurantId}/table/${tableId}/booking`, book, {
                 headers: {
                     'Authorization': localStorage.getItem('token'),
                     'Content-Type': 'application/json'
-                },
-                data: JSON.stringify(book)
-
+                }
             });
-            
+
+            // Ensure that response.data contains the booking data or modify accordingly
             dispatch(createBooking(response.data));
             console.log(response.data, 'book');
-        } catch (e) {
-            console.log(e);
+            return response.data; // Return the booking data if necessary
+
+        } catch (error) {
+            console.error('Error creating booking:', error);
+            throw error; // Re-throw the error for the caller to handle
         }
-    }
-}
+    };
+};
+
+
+

@@ -6,10 +6,8 @@ import swal from 'sweetalert';
 import { v4 as uuidv4 } from 'uuid';
 import isEmail from 'validator/lib/isEmail';
 import axios from '../../config/axios';
-// import './Signin.css';
-import { useDispatch, useSelector } from 'react-redux';
-import {Row,Col} from 'reactstrap'
-// import { loginSuccess } from '../../redux/actions/userAction';
+import './Signin.css';
+
 
 function Login() {
 
@@ -38,11 +36,6 @@ function Login() {
     }
   }
 
-  const userData=useSelector(state=>state)
-  console.log(userData)
-
-  const dispatch=useDispatch()
-
   async function handleSubmit(e) {
     e.preventDefault();
     runValidator();
@@ -55,19 +48,16 @@ function Login() {
         const formData = _.pick(user, 'email', 'password');
         const response = await axios.post('/api/login', formData);
         localStorage.setItem('token', response.data.token)
-        localStorage.setItem('user',response.data.user.username)
         const token = response.data.token
-        console.log(response.data.user,'11')
-        // dispatch(loginSuccess(response.data.user))
-        localStorage.setItem('token',token)
+
         swal("success","login successfull","success")
-        console.log(token,'token');
-        
+        localStorage.setItem('token',token)
+        console.log(token);
         
 
         if(response && token){
             const tokenData = jwtDecode(token)
-             
+             console.log(tokenData);
              console.log(tokenData.role);
              if(tokenData.role=='restaurantOwner'){
               try{
@@ -84,7 +74,7 @@ function Login() {
                 console.log(restaurant.data);
                 if(status == 'approved'){
                   console.log('approved');
-                  navigate(`/restaurant/dash`)
+                  navigate(`/restaurant/${id}`)
 
 
                 }else if(status == 'rejected'){
@@ -95,14 +85,14 @@ function Login() {
                 }else if(status == 'pending'){
                   console.log('pending');
 
-                  navigate('/reshome')
+                  navigate('/restaurantHome')
                 }
 
               }catch(e){
                 console.log(e,'error restaurant fetching');
                 if(e.response.data.error == 'restaurant not found'){
 
-                  navigate('/reshome')
+                  navigate('/restaurantHome')
                 }
               }
 
@@ -141,11 +131,7 @@ function Login() {
   }
 
   return (
-    <div className='continer-fluid'>
-      <Row>
-        <Col md={6} className='wrapper'></Col>
-    <Col md={6} className="container d-flex justify-content-center align-items-center">
-
+    <div className="container d-flex justify-content-center align-items-center">
       <div className="card p-4" style={{ maxWidth: '500px' }}>
         <h2 className="mb-4 ">Sign In</h2>
         {/* {console.log(user.serverErrors)} */}
@@ -215,8 +201,6 @@ function Login() {
           New User? <Link to="/register">Register</Link>
         </p>
       </div>
-    </Col>
-    </Row>
     </div>
   );
 }

@@ -1,31 +1,49 @@
-import React from 'react'
-import  { RadioChangeEvent } from 'antd';
-import { Radio, Tabs } from 'antd';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { BiEdit, BiKey, BiLogOut, BiShoppingBag } from 'react-icons/bi';
+import './profile.css'; // Import the CSS file
 
 export default function Profile() {
-  return (
-    <div>
-      <Radio.Group  style={{ marginBottom: 8 }}>
-        <Radio.Button value="top">
-          <h2>top</h2>
-        </Radio.Button>
-        <Radio.Button value="left">Vertical</Radio.Button>
-      </Radio.Group>
-      <Tabs
-        defaultActiveKey="1"
-        
-        style={{ height: 220 }}
-        items={new Array(30).fill(null).map((_, i) => {
-          const id = String(i);
-          return {
-            label: `Tab-${id}`,
-            key: id,
-            disabled: i === 28,
-            children: `Content of tab ${id}`,
-          };
-        })}
-      />
+  const navigate = useNavigate();
 
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/login');
+  };
+
+  return (
+    <div className="wrapper">
+      {/* Side Navbar */}
+      <nav id="sidebar" className="profile-sidebar">
+
+        <ul className="list-unstyled components">
+          <li>
+            <button className="profile-button larger-icon" onClick={() => navigate('/my-orders')} title="My Orders">
+              <BiShoppingBag size={24} />
+              <h6>My Orders</h6>
+            </button>
+          </li>
+          <li>
+            <button className="profile-button larger-icon" onClick={() => navigate('/edit-profile')} title="Edit Profile">
+              <BiEdit size={24} />
+              <h6>Edit Profile</h6>
+            </button>
+          </li>
+          <li>
+            <button className="profile-button change-password larger-icon" onClick={() => navigate('/change-password')} title="Change Password">
+              <BiKey size={24} />
+              <h6>Change
+                Password</h6>
+            </button>
+          </li>
+          <li>
+            <button className="profile-button larger-icon" onClick={handleLogout} title="Logout">
+              <BiLogOut size={24} />
+              <h6>Logout</h6>
+            </button>
+          </li>
+        </ul>
+      </nav>
     </div>
-  )
+  );
 }

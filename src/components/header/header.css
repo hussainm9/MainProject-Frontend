@@ -1,122 +1,25 @@
-/* header.css */
+/* profile.css */
 
-/* Reset default margin and padding */
-body, html {
-  margin: 0;
-  padding: 0;
-}
-
-.header {
-  background-color: #8fd3f4;
-}
-
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.logo {
-  max-width: 150px;
-}
-
-.nav_ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  align-items: center;
-}
-
-.nav_ul li {
-  margin-right: 20px;
-}
-
-.nav_link {
-  color: #333;
-  text-decoration: none;
-  font-weight: bold;
-  transition: color 0.3s ease;
-}
-
-.nav_link:hover {
-  color: #555;
-}
-
-.search_box {
-  position: relative;
-}
-
-.search_input {
-  width: 0;
-  height: 40px;
-  padding: 0 40px 0 10px;
-  border: none;
-  border-radius: 20px;
-  background-color: #fff;
-  transition: width 0.5s ease;
-}
-
-.search_input:focus {
-  width: 200px;
-}
-
-.search_icon {
-  position: absolute;
-  top: 50%;
-  right: 10px;
-  transform: translateY(-50%);
+/* CSS for hover effect and button box */
+.nav-item .nav-link:hover {
+  background-color: blue;
   cursor: pointer;
 }
 
-.profile_dropdown {
-  position: relative;
+/* CSS for separating buttons with borders */
+.nav-item:not(:last-child) .nav-link {
+  border-bottom: 1px solid #dee2e6;
 }
 
-.profile_dropdown_menu {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  background-color: #fff;
+/* CSS for enclosing all buttons in one box */
+.nav.flex-column {
+  border: 1px solid #dee2e6;
   border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  padding: 10px;
-  display: none;
+  margin-bottom: 10px;
 }
 
-.profile_dropdown_menu.show {
-  display: block;
-}
-
-.profile_dropdown_menu_item {
-  margin: 5px 0;
-  cursor: pointer;
-}
-
-
-@media (max-width: 768px) {
-  .container {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .nav_ul {
-    margin-top: 20px;
-  }
-
-  .nav_ul li {
-    margin-right: 0;
-    margin-bottom: 10px;
-  }
-
-  .search_input {
-    width: 100%;
-  }
-
-  .profile_dropdown_menu {
-    right: 20px;
-  }
+/* CSS for black text color */
+.nav-item .nav-link span,
+.nav-item .nav-link {
+  color: black;
 }
