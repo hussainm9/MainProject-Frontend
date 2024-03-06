@@ -77,4 +77,3 @@ function EditMenuModal({ menuItem, handleCloseModal, resId, token, handleMenuIte
 }
 
 export default EditMenuModal;
-

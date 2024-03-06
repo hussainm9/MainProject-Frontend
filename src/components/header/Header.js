@@ -6,6 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import logo from "../images/logo.png";
 import { useDispatch, useSelector } from 'react-redux';
 import { getUser } from '../../redux/actions/userAction';
+import ProfileDropdown from '../guest/profileDropdown';
 
 export default function Header() {
   const [role, setRole] = useState(null);
@@ -15,7 +16,8 @@ export default function Header() {
   const profileRef = useRef(null);
 
   const dispatch = useDispatch();
-  const { user } = useSelector(state => state.user);
+
+  const user  = useSelector(state => state.user.user);
   
   const navigate = useNavigate();
 
@@ -144,12 +146,11 @@ export default function Header() {
             <div ref={profileRef} className="d-flex align-items-center position-relative">
               <div className="dropdown" onClick={toggleProfileDropdown}>
                 <FaRegCircleUser className="profile-icon" style={{ fontSize: '30px' }} />
-                {user && user.username}
+                
               </div>
               {showProfileDropdown && (
                 <div className='position-absolute top-100 start-0 bg-white p-1 shadow rounded'>
-                  <p onClick={handleLogout} className='whitespace-nowrap cursor-pointer fs-6'>Logout</p>
-                  <p onClick={() => navigate('/profile')} className='whitespace-nowrap cursor-pointer text-sm'>Profile</p>
+                  <ProfileDropdown/>
                 </div>
               )}
             </div>

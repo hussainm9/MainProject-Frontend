@@ -15,9 +15,10 @@ import { addMenu, decQuantity } from '../../redux/actions/menuAction';
 import { removeMenu } from '../../redux/actions/menuAction';
 import { asyncGetMenu } from '../../redux/actions/menuAction';
 import { asyncgetOneTable } from '../../redux/actions/tableAction';
-import { asyncCreateBooking } from '../../redux/actions/bookingAction';
+import { asyncCreateBooking, createBooking } from '../../redux/actions/bookingAction';
 import Loading from '../pages/loading';
 import { Dropdown } from 'react-bootstrap'
+import OrdersPDF from './orderSummary';
 
 export default function TableBook() {
     const { userId, restaurantId, tableId } = useParams();
@@ -26,6 +27,7 @@ export default function TableBook() {
     const [click, setClick] = useState(false);
     const [loading, setLoading] = useState(true)
     const [sortBy, setSortBy] = useState('asc')
+    
 
     const dispatch = useDispatch();
     const tableData = useSelector((state) => state.table.table);
@@ -58,6 +60,7 @@ export default function TableBook() {
             selectedCategory: '',
             selectedDish: ''
         },
+        validationOnChange:true,
         validationSchema: validationSchema,
         onSubmit: async (values) => {
             try {
@@ -183,7 +186,7 @@ export default function TableBook() {
     
             if (result.error) {
                 console.log(result.error);
-                toast.error('Payment unsuccessful');
+                toast.error('Error occurred while making payment');
             } else {
                 // Payment successful, update payment status
                 await fetch('http://localhost:3786/api/payment-update', {
@@ -192,6 +195,7 @@ export default function TableBook() {
                     body: JSON.stringify({ transactionId: session.id })
                 });
                 toast.success('Payment successful');
+                
             }
         } catch (error) {
             console.error(error);
@@ -217,6 +221,7 @@ export default function TableBook() {
         <div>
             <h2>This is the page for booking the table</h2>
             <div className='row'>
+                
                 <div className='col-md-6'>
                     <h2>Menu Listing</h2>
                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>

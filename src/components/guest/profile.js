@@ -30,7 +30,7 @@ export default function Profile() {
             </button>
           </li>
           <li>
-            <button className="profile-button change-password larger-icon" onClick={() => navigate('/change-password')} title="Change Password">
+            <button className="profile-button change-password larger-icon" onClick={() => navigate('/updatepassword')} title="Change Password" >
               <BiKey size={24} />
               <h6>Change
                 Password</h6>

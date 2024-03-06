@@ -1,4 +1,4 @@
-import {FAIL_REQUEST, GET_USER, MAKE_REQUEST } from "../actions/actionTypes";
+import {FAIL_REQUEST, GET_USER, MAKE_REQUEST, UPDATE_USER } from "../actions/actionTypes";
 
 const userInitialState  = {
   loading:true,
@@ -13,6 +13,7 @@ const userReducer = (state = userInitialState, action) => {
           ...state,
           loading:true
         } 
+     
       case FAIL_REQUEST:
         return{
           ...state,
@@ -26,6 +27,10 @@ const userReducer = (state = userInitialState, action) => {
           errormessage:'',
           user:action.payload
         }
+        case UPDATE_USER:
+          return {
+            ...state,user:action.payload
+          }
         
         
       default:

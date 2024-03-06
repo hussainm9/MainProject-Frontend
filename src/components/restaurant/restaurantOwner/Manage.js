@@ -1,16 +1,19 @@
 // RestaurantDashboard.js
 
 import React, { useContext, useEffect, useState } from 'react';
+import { Button, FormGroup, Input, Label } from 'reactstrap'; // Import Reactstrap components
 import restaurantContext from '../../../contextApi/restaurantContext';
 import { deleteMenuItem, fetchMenuItems } from '../../../services/menuService';
 import EditMenuModal from './EditMenuModal';
 import GetTable from './GetTable';
+import './Manage.css';
+
 function RestaurantDashboard() {
   const { restaurantState } = useContext(restaurantContext);
   const resId = restaurantState.restaurantOwner._id;
   const token = localStorage.getItem('token');
 
-  const [selectedValue, setSelectedValue] = useState('');
+  const [selectedValue, setSelectedValue] = useState("table");
   const [category, setCategory] = useState('');
   const [menuItems, setMenuItems] = useState([]);
   const [filteredMenuItems, setFilteredMenuItems] = useState([]);
@@ -71,9 +74,9 @@ function RestaurantDashboard() {
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+      <div className="radio-buttons">
         <div>
-          <input
+          <Input
             type="radio"
             id="menu"
             name="category"
@@ -81,11 +84,11 @@ function RestaurantDashboard() {
             checked={selectedValue === 'menu'}
             onChange={handleRadioChange}
           />
-          <label htmlFor="menu">Menu</label>
+          <Label htmlFor="menu"><b>Menu</b></Label>
         </div>
 
         <div>
-          <input
+          <Input
             type="radio"
             id="table"
             name="category"
@@ -93,16 +96,16 @@ function RestaurantDashboard() {
             checked={selectedValue === 'table'}
             onChange={handleRadioChange}
           />
-          <label htmlFor="table">Table</label>
+          <Label htmlFor="table"><b>Table</b></Label>
         </div>
       </div>
 
       {selectedValue === 'menu' && (
-        <div>
+        <div className="menu-list">
           <h2>Menu Item List</h2>
-          <label>
-            Category:
-            <select value={category} onChange={handleCategoryChange}>
+          <FormGroup>
+            <Label for="category">Category:</Label>
+            <Input type="select" name="category" id="category" value={category} onChange={handleCategoryChange}>
               <option value=''>Select category</option>
               <option value="All">All</option>
               <option value="Breakfast">Breakfast</option>
@@ -113,22 +116,22 @@ function RestaurantDashboard() {
               <option value="Beverages">Beverages</option>
               <option value="Starters">Starters</option>
               <option value="Sandwiches">Sandwiches</option>
-            </select>
-          </label>
+            </Input>
+          </FormGroup>
           <br />
-          <h3>Menu Items</h3>
-          <ul>
+          <div className="menu-items-container">
             {filteredMenuItems.map((menuItem, index) => (
-              <li key={index}>
-                {menuItem.name} - {menuItem.price}
-                <button onClick={() => handleDelete(menuItem._id)}>Delete</button>
-                <button onClick={() => toggleEditModal(menuItem)}>Edit</button>
-              </li>
+              <div key={index} className="menu-item">
+                <span>{menuItem.name} - {menuItem.price}</span>
+                <Button color="primary" onClick={() => toggleEditModal(menuItem)}>Edit</Button>
+                <Button color="danger" onClick={() => handleDelete(menuItem._id)}>Delete</Button>
+              </div>
             ))}
-          </ul>
+          </div>
         </div>
       )}
-      {selectedValue === 'table' && (<GetTable/>)}
+
+      {selectedValue === 'table' && (<GetTable />)}
 
       {showEditModal && (
         <EditMenuModal
@@ -144,5 +147,3 @@ function RestaurantDashboard() {
 }
 
 export default RestaurantDashboard;
-
-

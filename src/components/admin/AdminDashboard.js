@@ -15,7 +15,7 @@ export default function AdminDashboard() {
 
   return (
     <div>
-      <h2>Admin Dashboard</h2>
+    
       <div className="row">
         <div className="col-4">
           <button type="button" className="btn btn-warning btn-block " onClick={(e)=>setTitle('pending')} >Pending Restaurants</button>

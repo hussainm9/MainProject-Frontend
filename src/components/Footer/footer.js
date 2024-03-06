@@ -4,12 +4,12 @@ const Footer = () => {
     const currentYear = new Date().getFullYear();
 
     return (
-        <footer className="footer mt-auto py-3 bg-light" >
-            <div className="container text-center">"
+        <footer className="footer mt-auto py-3 bg-light  "style={{padding: '20px'}} >
+            <div className="container text-center">
                 <span className="text-muted">&copy; {currentYear} Resofy. All rights reserved.</span>
             </div>
         </footer>
     );
 }
 
-export default Footer
+export default Footer;

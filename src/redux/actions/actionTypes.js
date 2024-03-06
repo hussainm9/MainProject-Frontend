@@ -1,6 +1,7 @@
 export const MAKE_REQUEST='MAKE_REQUEST'
 export const FAIL_REQUEST='FAIL_REQUEST'
 export const GET_USER='GET_USER'
+export const UPDATE_USER='UPDATE_USER'
 export const GET_TABLES='GET_TABLES'
 export const GET_ONE_TABLE='GET_ONE_TABLE'
 export const TABLES_ERROR='TABLES_ERROR'

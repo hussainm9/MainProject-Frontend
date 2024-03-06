@@ -1,0 +1,60 @@
+/* Manage.css */
+.radio-buttons {
+    display: flex;
+    /* Adjust spacing between buttons (gap property not supported in IE10 and below): */
+    gap: 800px;
+  
+    /* Alternative for older browsers (replace with gap if supported): */
+    -ms-flex-pack: distribute; /* For IE11 */
+    justify-content: space-between; /* Standard fallback for other browsers */
+  
+    /* Optional: Center buttons horizontally if not at container edges: */
+    align-items: center;
+    width: 600px; /* Adjust width to accommodate desired gap and button sizes */
+      padding-left: 150px; /* Adjust the left padding as desired */
+  
+  }
+  
+  
+  
+  .menu-list {
+    border: 1px solid #ccc;
+    padding: 20px;
+  }
+  
+      .menu-items-container {
+      display: flex;
+      flex-wrap: wrap;
+  
+      }
+  
+  /* Manage.css */
+  .menu-item {
+    display: flex; /* Use flexbox to arrange elements */
+    justify-content: space-between; /* Spread elements horizontally */
+    align-items: center; /* Align items vertically */
+    width: calc(50% - 200px); /* Adjust width to leave space for buttons */
+    margin-bottom: 10px;
+    padding: 10px;
+    padding-left: 30px;
+    border: 1px solid #eee;
+    border-radius: 5px;
+  }
+  
+  .menu-item span {
+    width: 400px; /* Set width for menuItem name */
+    overflow: hidden; /* Hide overflowing text */
+    text-overflow: ellipsis; /* Add ellipsis for long text */
+    white-space: nowrap; /* Prevent line breaks */
+    margin-right: 10px;
+      padding-right: 20px; /* Adjust spacing as needed */
+  
+  }
+  
+  .delete-btn {
+    margin-left: auto; /* Push delete button to the end of the container */
+  }
+  
+  .menu-item button {
+    margin-right: 15px;
+  }

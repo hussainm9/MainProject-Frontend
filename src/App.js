@@ -34,11 +34,24 @@ import Success from './components/payment/paymentSuccess';
 import Failure from './components/payment/paymentFailure';
 import Display from './components/pages/search';
 import Footer from './components/Footer/footer';
+import NotFound from './components/restaurant/NotFound';
+import bookingContext from './contextApi/bookingContext';
+import bookingReducer from './reducer-hook/bookingReducer';
+import EachBooking from './components/restaurant/bookings/EachBooking';
+import BookingCalendar from './components/restaurant/bookings/DateBookings';
+import Orders from './components/guest/userOrders';
+import UpdateProfile from './components/guest/editProfile';
+import MyDocument from './components/booking/orderSummary';
+
 
 
 function App() {
     const [userState, userDispatch] = useReducer(userReducer, { userDetails: {} });
     const [restaurantState, restaurantDispatch] = useReducer(restaurantReducer, { restaurantOwner: {}, allRestaurants: [] });
+    const [bookingState, bookingDispatch] = useReducer(bookingReducer, {
+        restaurantBookings: [],
+
+    })
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -94,6 +107,7 @@ function App() {
         <BrowserRouter>
             <userContext.Provider value={{ userState, userDispatch }}>
                 <restaurantContext.Provider value={{ restaurantState, restaurantDispatch }}>
+                    <bookingContext.Provider value={{ bookingState, bookingDispatch }}>
                     <div className="gradient-background">
                         <Header />
                         <Routes>
@@ -114,22 +128,26 @@ function App() {
                             <Route path='/updaterestaurant' element={<UpdateRestaurant />} />
                             <Route path='/reshome' element={<ResHome />} />
                             <Route path='/aboutrestaurant' element={<About />} />
-                            <Route path='/bookings' element={<Bookings />} />
+                            <Route path='/bookings' element={<BookingCalendar />} />
+                            <Route path='/bookings-calendar/:id' element={<EachBooking/>}/>
                             <Route path='/home' element={<Home />} />
-                            <Route path='/' element={<Display/>}/>
+                            <Route path='/' element={<Display />} />
                             <Route path='/search' element={<Home />} />
                             <Route path='/restaurant/:restaurantId' element={<RestaurantDashboard />} />
                             <Route path='/table/:restaurantId' element={<TableDisplay />} />
                             <Route path='/api/user/:userId/restaurant/:restaurantId/table/:tableId/booking' element={<TableBook />} />
                             <Route path='/success' element={<Success />} />
                             <Route path='/failure' element={<Failure />} />
-                            <Route path='/profile' element={<Profile/>}/>
-                            
+                            <Route path='/profile' element={<Profile />} />
+                            <Route path='my-orders' element={<Orders />} />
+                            <Route path='edit-profile' element={<UpdateProfile />} />
+                            <Route path='*' element={<NotFound />} />
+                            {/* <Route path='/pdf' element={<MyDocument/>}/> */}
                         </Routes>
-                        <Footer/>
+                        <Footer />
                         <ToastContainer
                             position="top-center"
-                            autoClose={2000} 
+                            autoClose={2000}
                             hideProgressBar={false}
                             newestOnTop={false}
                             closeOnClick
@@ -139,9 +157,10 @@ function App() {
                             pauseOnHover
                         />
                     </div>
-                </restaurantContext.Provider>
-            </userContext.Provider>
-        </BrowserRouter>
+                </bookingContext.Provider>
+            </restaurantContext.Provider>
+        </userContext.Provider>
+        </BrowserRouter >
     );
 }
 

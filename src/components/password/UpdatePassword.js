@@ -1,41 +1,43 @@
-import axios from "axios";
+import React, { useContext, useState } from "react";
 import { useFormik } from "formik";
-import { useContext, useState } from "react";
 import * as Yup from 'yup';
-import restaurantContext from "../../contextApi/restaurantContext";
+import { message } from 'antd';
+import { jwtDecode } from "jwt-decode"
 import { updatePassword } from "../../services/passwordService";
+import restaurantContext from "../../contextApi/restaurantContext";
+import Profile from "../guest/profile";
 
-function UpdatePassword(){
-    const {restaurantState} = useContext(restaurantContext)
-    const resId = restaurantState.restaurantOwner._id
+function UpdatePassword() {
+    const { restaurantState } = useContext(restaurantContext);
+    const resId = restaurantState.restaurantOwner._id;
     const passwordValidationSchema = Yup.object({
-        oldPassword: Yup.string().required().min(8),
+        oldPassword: Yup.string().required().min(''),
         newPassword: Yup.string().required().min(8)
     });
 
     const [showOldPassword, setShowOldPassword] = useState(false);
     const [showNewPassword, setShowNewPassword] = useState(false);
+    const token = jwtDecode(localStorage.getItem('token'))
 
     const formik = useFormik({
-        initialValues:{
-            oldPassword:'',
-            newPassword:''
+        initialValues: {
+            oldPassword: '',
+            newPassword: ''
         },
-        validationOnChange:true,
+        validationOnChange: true,
         validationSchema: passwordValidationSchema,
-        onSubmit: async function (values,{resetForm}) {
-            console.log(values); 
-            const formData = values 
-            try{
-                const token = localStorage.getItem('token')
-                const data = await updatePassword(formData,token)
-                console.log(data);
-                resetForm()      
-
-            }catch(e){
-                console.log(e,'errors');
+        onSubmit: async function (values, { resetForm }) {
+            console.log(values);
+            const formData = values;
+            try {
+                const token = localStorage.getItem('token');
+                await updatePassword(formData, token);
+                resetForm();
+                message.success('Password changed successfully');
+            } catch (e) {
+                console.log(e, 'errors');
+                message.error('Something went wrong!');
             }
-
         }
     });
 
@@ -48,14 +50,19 @@ function UpdatePassword(){
     };
 
     return (
-        <div className="container mt-5">
-            <div className="row justify-content-center">
-                <div className="col-md-6">
+        <div className="container-fluid mt-5">
+            <div className="row">
+                {token.role === 'guest' ? (
+                    <div className="col-md-4 p-0">
+                        <Profile />
+                    </div>
+                ) : null}
+                <div className="col-md-5">
                     <h2 className="text-center mb-4">Update Password</h2>
                     <form onSubmit={formik.handleSubmit}>
                         <div className="mb-3">
                             <label htmlFor="oldPassword" className="form-label">Old Password</label>
-                            <input 
+                            <input
                                 type={showOldPassword ? 'text' : 'password'}
                                 className="form-control"
                                 id="oldPassword"
@@ -79,7 +86,7 @@ function UpdatePassword(){
                         </div>
                         <div className="mb-3">
                             <label htmlFor="newPassword" className="form-label">New Password</label>
-                            <input 
+                            <input
                                 type={showNewPassword ? 'text' : 'password'}
                                 className="form-control"
                                 id="newPassword"
