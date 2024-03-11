@@ -22,7 +22,7 @@ import Bookings from './components/restaurant/restaurantOwner/Bookings';
 import RestaurantDashboard from './components/restaurant/restaurantOwner/Manage';
 import UpdateRestaurant from './components/restaurant/restaurantOwner/UpdateRestaurant';
 import ResHome from './components/restaurant/registration/registerForm';
-import Home from './components/Home/Home';
+// import Home from './components/Home/Home';
 import TableDisplay from './components/tables/tablesDisplay';
 import TableBook from './components/booking/tableBook';
 import axiosInstance from './config/axios';
@@ -130,9 +130,10 @@ function App() {
                             <Route path='/aboutrestaurant' element={<About />} />
                             <Route path='/bookings' element={<BookingCalendar />} />
                             <Route path='/bookings-calendar/:id' element={<EachBooking/>}/>
-                            <Route path='/home' element={<Home />} />
+                            {/* <Route path='/home' element={<Home />} /> */}
                             <Route path='/' element={<Display />} />
-                            <Route path='/search' element={<Home />} />
+                            <Route path='/about' element={<About/>}/>
+                            {/* <Route path='/search' element={<Home />} /> */}
                             <Route path='/restaurant/:restaurantId' element={<RestaurantDashboard />} />
                             <Route path='/table/:restaurantId' element={<TableDisplay />} />
                             <Route path='/api/user/:userId/restaurant/:restaurantId/table/:tableId/booking' element={<TableBook />} />

@@ -37,13 +37,29 @@ export default function Display() {
         setShowDescriptions(newShowDescriptions);
     };
 
-    const truncateDescription = (description) => {
+    const truncateDescription = (description, index) => {
         const words = description.split(' ');
-        if (words.length > 20) { // Changed the condition to check if the description exceeds 20 words
-            return words.slice(0, 20).join(' ') + '...';
+        if (words.length > 20) {
+            return (
+                <React.Fragment>
+                    {showDescriptions[index] ? description : `${words.slice(0, 20).join(' ')}...`}
+                    <button className="btn btn-link p-0" onClick={() => handleToggleDescription(index)}>
+                        {showDescriptions[index] ? 'Read Less' : 'Read More'}
+                    </button>
+                </React.Fragment>
+            );
         }
         return description;
     };
+
+    function handleMap(res) {
+        const name = res.name;
+        const address = `${res.name}, ${res.address.street},${res.address.area},${res.address.city},${res.address.state},${res.address.pincode}`;
+        console.log(name, address);
+        const googleMapsLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+        console.log(googleMapsLink);
+        window.location.href = googleMapsLink;
+    }
 
     return (
         <div>
@@ -78,13 +94,11 @@ export default function Display() {
                                             <h5 className="card-title">Name: {ele.name}</h5>
                                             <p className="card-text">Address: {ele.address.city}, {ele.address.street}</p>
                                             <p className="card-text">
-                                                Description: {showDescriptions[index] ? ele.description : truncateDescription(ele.description)}
-                                                {ele.description.split(' ').length > 20 && // Changed the condition to check if the description exceeds 20 words
-                                                    <button className="btn btn-link p-0" onClick={() => handleToggleDescription(index)}>
-                                                        {showDescriptions[index] ? 'Read Less' : 'Read More'}
-                                                    </button>
-                                                }
+                                                Description: {truncateDescription(ele.description, index)}
                                             </p>
+                                        </div>
+                                        <div className="card-footer d-grid">
+                                            <button className='btn btn-info btn-block' onClick={() => { handleMap(ele) }}>View in Map</button>
                                         </div>
                                     </div>
                                 </div>

@@ -5,7 +5,7 @@ import axiosInstance from '../../../config/axios';
 import { restaurantRegistration } from '../../../services/restaurantService';
 import './registerForm.css';
 
-export default function ResHome() {
+export default function ResRegisterForm() {
     const navigate = useNavigate()
     const [restaurant, setRestaurant] = useState({
         gstIn: '',

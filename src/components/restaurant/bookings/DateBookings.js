@@ -11,6 +11,7 @@ import { fetchBookingsByDate } from '../../../services/bookingService';
 
 export default function BookingCalendar() {
     const { restaurantState } = useContext(restaurantContext);
+    console.log(restaurantState,'state')
     const { bookingDispatch, bookingState } = useContext(bookingContext)
 
     //console.log(bookingState, 'bookingState', 'bookingDispatch', bookingDispatch);

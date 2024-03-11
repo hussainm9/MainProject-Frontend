@@ -118,7 +118,7 @@ export default function Header() {
                   <Link className="nav-link active" to='/'>Home</Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link active" to="book">Book Table</Link>
+                  <Link className="nav-link active" to='/'>Book Table</Link>
                 </li>
               </>
             ) : null}
